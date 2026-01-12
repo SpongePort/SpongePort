@@ -1,0 +1,3 @@
+[submodule "psyx"]
+	path = psyx
+	url = https://github.com/SpongePort/PsyCross.git
