@@ -252,6 +252,11 @@ char *__getDbgLineFromLog(int _line)
 /*****************************************************************************/
 void DoAssert( const char * Txt, const char * file, const int line )
 {
+#ifdef	WIN32
+	char msg[2048];
+	sprintf(msg, "Assertion failed: %s\n%s:%d", Txt, file, line);
+	printf(msg);
+#else
 	printf( "%s", Txt );
 
 #ifdef	OnScreenDebug
@@ -287,6 +292,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 
 #endif
 	//PSYQpause();
+#endif
 }
 
 /*****************************************************************************/

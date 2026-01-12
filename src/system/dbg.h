@@ -27,12 +27,12 @@
 
 // Allow debug messaging
 #if defined(__VERSION_DEBUG__)
-//#define DBG_ACTIVE
+#define DBG_ACTIVE
 #endif
 
 
 // Available channels
-enum
+typedef enum
 {
 	DC_CHARLES		=1<<0,
 	DC_DAVE			=1<<1,

@@ -4,11 +4,11 @@
 
 #include	"system/global.h"
 #include	"fileio/fileio.h"
-#if			__FILE_SYSTEM__==PC
-#include	"fileio/pcfile.h"
-#else
+//#if			__FILE_SYSTEM__==PC
+//#include	"fileio/pcfile.h"
+//#else
 #include	"fileio/cdfile.h"
-#endif
+//#endif
 #include	"utils/replace.h"
 #include	"utils/utils.h"
 
@@ -62,11 +62,11 @@ DataBankEquate	CFileIO::CurrentDataBank=DATABANK_MAX;
 //sFAT	*FAT;
 void	CFileIO::Init()
 {
-#if		__FILE_SYSTEM__==PC
-		FileIO=new ("CFileIO::FileIOInit") CPCFileIO(LumpNames[DataLump],&BigLump);
-#else
+//#if		__FILE_SYSTEM__==PC
+//		FileIO=new ("CFileIO::FileIOInit") CPCFileIO(LumpNames[DataLump],&BigLump);
+//#else
 		FileIO=new ("CFileIO::FileIOInit") CCDFileIO(0,&BigLump);
-#endif
+//#endif
 		BigLump.Status=BLStatusReady;
 
 int		FATSize=FileEquate_MAX*sizeof(sFAT);

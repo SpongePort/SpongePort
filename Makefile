@@ -18,7 +18,9 @@ DEFS :=  	-D__USER_$(USER)__ \
 			-D__TERRITORY_STR__=$(TERRITORY) \
 			-D__FILE_SYSTEM__=$(FILE_SYSTEM) \
 			-DUSE_OPENAL \
-			-D_LANGUAGE_C_PLUS_PLUS
+			-D_LANGUAGE_C_PLUS_PLUS \
+			-DUSE_CPP_MEM \
+			-DWIN32
 
 CCFLAGS := 	-w \
 			-g \

@@ -492,6 +492,7 @@ int		BestNode,FirstNode;
 }
 
 /*****************************************************************************/
+#ifndef USE_CPP_MEM
 void  	MemFree( void * Address )
 {
 u32 	Len;
@@ -567,6 +568,7 @@ char	*Addr = (char*)Address;
 		freeDebugMem( Address );
 #endif
 }
+#endif
 /*
 void  	MemFree( void * Address )
 {
