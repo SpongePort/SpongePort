@@ -27,7 +27,7 @@ public:
 
 private:
 	sBigLump	*BigLump;
-	s32			FileHandle;
+	FILE*			FileHandle;
 	char		FullFilename[256];
 
 };

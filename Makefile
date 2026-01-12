@@ -1,7 +1,7 @@
 VERSION := DEBUG
 TERRITORY := USA
 USER := CDBUILD
-FILE_SYSTEM := CD
+FILE_SYSTEM := PC
 
 CC := g++
 LD := g++
@@ -42,7 +42,7 @@ SRC_DIR := src
 BUILD_DIR := build
 
 SRCS := $(wildcard $(SRC_DIR)/**/*.cpp)
-OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/obj/%.o,$(SRCS))
 
 .PHONY: psyx clean
 
@@ -56,7 +56,7 @@ psyx:
 clean:
 	rm -rf $(BUILD_DIR)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(BUILD_DIR)/obj/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p ${@D}
 	$(CC) $(CCFLAGS) -c $< -o $@
 

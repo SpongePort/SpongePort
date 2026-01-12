@@ -10,31 +10,30 @@
 CPCFileIO::CPCFileIO(char *Filename,sBigLump *BigLumpPtr)
 {
 int		NoPath=0;
-		PCinit();
-		sprintf(FullFilename,"out\\%s\\%s\\version\\%s\\%s",INF_Territory,INF_Version,INF_FileSystem,Filename);
+		sprintf(FullFilename,"assets/%s",Filename);
 		BigLump=BigLumpPtr;
-		FileHandle=-1;
+		FileHandle=NULL;
 }
 
 /*****************************************************************************/
 void 	CPCFileIO::Open()
 {
-		FileHandle=PCopen(FullFilename,F_READ,0);
-		ASSERT(FileHandle!=-1);
+		FileHandle=fopen(FullFilename, "rb");
+		ASSERT(FileHandle != NULL);
 }
 
 /*****************************************************************************/
 void 	CPCFileIO::Read(u32 Count,void *Dst)
 {
-		PClseek(FileHandle,BigLump->Sector*FILEIO_CHUNKSIZE,0);
-		PCread(FileHandle,(char*)Dst,Count*FILEIO_CHUNKSIZE);
+		fseek(FileHandle,BigLump->Sector*FILEIO_CHUNKSIZE,SEEK_SET);
+		fread((char*)Dst,Count*FILEIO_CHUNKSIZE,1,FileHandle);
 		BigLump->Sector+=Count;
 }
 
 /*****************************************************************************/
 void 	CPCFileIO::Close()
 {
-		if (FileHandle!=-1) PCclose(FileHandle);
-		FileHandle=-1;
+		if (FileHandle!=NULL) fclose(FileHandle);
+		FileHandle=NULL;
 
 }

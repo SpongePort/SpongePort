@@ -4,11 +4,11 @@
 
 #include	"system/global.h"
 #include	"fileio/fileio.h"
-//#if			__FILE_SYSTEM__==PC
-//#include	"fileio/pcfile.h"
-//#else
+#if			__FILE_SYSTEM__==PC
+#include	"fileio/pcfile.h"
+#else
 #include	"fileio/cdfile.h"
-//#endif
+#endif
 #include	"utils/replace.h"
 #include	"utils/utils.h"
 
@@ -36,6 +36,10 @@ sASyncQueue	CFileIO::ASyncQueue;
 bool		CFileIO::ASyncFlag;
 bool		CFileIO::LogFlag;
 
+#ifdef EXTERNAL_ASSETS
+FILE*       CFileIO::ExtFile;
+#endif
+
 /*****************************************************************************/
 sDataBank	CFileIO::DataBank[DATABANK_MAX]=
 {
@@ -62,11 +66,13 @@ DataBankEquate	CFileIO::CurrentDataBank=DATABANK_MAX;
 //sFAT	*FAT;
 void	CFileIO::Init()
 {
-//#if		__FILE_SYSTEM__==PC
-//		FileIO=new ("CFileIO::FileIOInit") CPCFileIO(LumpNames[DataLump],&BigLump);
-//#else
+#ifndef EXTERNAL_ASSETS
+
+#if		__FILE_SYSTEM__==PC
+		FileIO=new ("CFileIO::FileIOInit") CPCFileIO(LumpNames[DataLump],&BigLump);
+#else
 		FileIO=new ("CFileIO::FileIOInit") CCDFileIO(0,&BigLump);
-//#endif
+#endif
 		BigLump.Status=BLStatusReady;
 
 int		FATSize=FileEquate_MAX*sizeof(sFAT);
@@ -95,6 +101,8 @@ int		FATSize=FileEquate_MAX*sizeof(sFAT);
 #if	defined(__USER_daveo__)
 		LogFlag=true;
 #endif
+
+#endif
 }
 
 
@@ -103,6 +111,12 @@ int		FATSize=FileEquate_MAX*sizeof(sFAT);
 /*****************************************************************************/
 void	CFileIO::OpenFile( FileEquate file )
 {
+#ifdef EXTERNAL_ASSETS
+	char path[1024];
+	sprintf(path, "assets/%s", ASSET_FILENAMES[file]);
+	ExtFile = fopen(path, "rb");
+	ASSERT(ExtFile != NULL);
+#else
 	ASSERT(MainFAT);
 	FileIO->Open();
 	BigLump.Status = BLStatusOpen;
@@ -112,6 +126,7 @@ void	CFileIO::OpenFile( FileEquate file )
 	BigLump.ReadSoFar=0;
 	BigLump.LoadMode = FILEIO_MODE_NONE;
 	BigLump.ChunkLeft=0;
+#endif
 }
 
 /*****************************************************************************/
@@ -135,6 +150,14 @@ int	ChunkCount;
 /*****************************************************************************/
 long CFileIO::ReadFile( void * Buffer, s32 Length )
 {
+#ifdef EXTERNAL_ASSETS
+	if (ExtFile != NULL)
+	{
+		fread(Buffer, Length, 1, ExtFile);
+	}
+
+	return 0;
+#else
 int	ThisLoadSize;
 
 	BigLump.LoadLeft=Length;
@@ -182,6 +205,7 @@ int	ThisLoadSize;
 		}
 
 	return (BigLump.LoadLeft);
+#endif
 }
 
 /*****************************************************************************/
@@ -189,6 +213,19 @@ int	ThisLoadSize;
 /*****************************************************************************/
 u8 * CFileIO::loadFile( FileEquate file, char *allocName )
 {
+#ifdef EXTERNAL_ASSETS
+	u8* buf;
+	s32 size;
+	
+	OpenFile(file);
+	fseek(ExtFile, 0L, SEEK_END);
+	size = ftell(ExtFile);
+	fseek(ExtFile, 0L, SEEK_SET);
+	buf = (u8*)MemAlloc(size, allocName);
+	memcpy(buf, ExtFile, size);
+
+	return buf;
+#else
 	u8 *	buffer;
 	s32		Length;
 
@@ -216,6 +253,7 @@ u8 * CFileIO::loadFile( FileEquate file, char *allocName )
 #endif
 
 	return buffer;
+#endif
 }
 
 /*****************************************************************************/
@@ -264,8 +302,13 @@ u8 * CFileIO::loadFileAtAddr( FileEquate file, u8* buffer)
 /*****************************************************************************/
 void 	CFileIO::CloseFile()
 {
+#ifdef EXTERNAL_ASSETS
+	fclose(ExtFile);
+	ExtFile = NULL;
+#else
 	FileIO->Close();
 	BigLump.Status=BLStatusReady;
+#endif
 }
 
 
@@ -300,8 +343,20 @@ int		Length = ((BigLump.ReadSoFar+Align-1)&-Align)-BigLump.ReadSoFar;
 
 s32		CFileIO::getFileSize( FileEquate file )
 {
+#ifdef EXTERNAL_ASSETS
+	s32 size;
+
+	OpenFile(file);
+	fseek(ExtFile, 0L, SEEK_END);
+	size = ftell(ExtFile);
+	fseek(ExtFile, 0L, SEEK_SET);
+	CloseFile();
+
+	return size;
+#else
 s32	Ret=MainFAT[file].FileSize;
 	return (Ret);
+#endif
 }
 
 

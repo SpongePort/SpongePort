@@ -20,15 +20,12 @@
 
 #ifdef	DBG_ACTIVE
 
-#ifndef __SYSTEM_VSPRINTF_H__
-#include "system/vsprintf.h"
-#endif
-
 
 /*	Std Lib
 	------- */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -178,10 +175,10 @@ void __writeDbgMessage(const char *_format,...)
 	if(s_dbgTransientChannelFlags&s_activeChannelFlags)
 	{
 		char		messageBuffer[256];
-		__va_list	va;
+		va_list		va;
 		int			start;//,len;
 		
-		__va_start(va,_format);
+		va_start(va,_format);
 #ifdef DBG_SHOW_MESSAGE_ORIGIN
 		sprintf(messageBuffer,"%s:%04d ",s_dbgTransientFilename,s_dbgTransientLine);
 		start=strlen(messageBuffer);
@@ -190,12 +187,13 @@ void __writeDbgMessage(const char *_format,...)
 		start=0;
 //		len=DBG_MAX_MESSAGE_LENGTH;
 #endif
-		__vsprintf(messageBuffer+start,_format,va);
-		__va_end(va);
+		vsprintf(messageBuffer+start,_format,va);
+		va_end(va);
 
 
 #ifdef DBG_OUTPUT_TO_DEBUGGER
 		printf("%s\n",messageBuffer);
+		fflush(stdout);
 #endif
 #ifdef DBG_OUTPUT_TO_LOG
 		strncpy(s_logLines[s_logLinePtr],messageBuffer,DBG_MAX_MESSAGE_LENGTH);
@@ -256,6 +254,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	char msg[2048];
 	sprintf(msg, "Assertion failed: %s\n%s:%d", Txt, file, line);
 	printf(msg);
+	abort();
 #else
 	printf( "%s", Txt );
 
