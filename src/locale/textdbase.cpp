@@ -15,6 +15,8 @@
 	Includes
 	-------- */
 
+#include "macros.h"
+
 /*	Module Header File
 	------------------ */
 #include "textdbase.h"
@@ -51,16 +53,23 @@
 /*----------------------------------------------------------------------
 	Structure defintions
 	-------------------- */
+
 struct TransHeader
 {
-	u32		m_numOfStrings;
-	char *	m_stringPtrs[1];
+	u32 m_numStrings;
+	u32 m_stringOffsets[1];
+};
+
+struct TransDB
+{
+	TransHeader* m_header;
+	char*   m_stringPtrs[1];
 
 	void relocate(void)
-		{
-		for (unsigned int f=0;f<m_numOfStrings;f++)
-			m_stringPtrs[f]=(char *)((u32)m_stringPtrs[f]+(u32)this);
-		}
+	{
+		for (unsigned int f=0;f<m_header->m_numStrings;f++)
+			m_stringPtrs[f] = (char*)m_header+sizeof(m_header->m_numStrings)+m_header->m_stringOffsets[f];
+	}
 
 	char const * getString(unsigned int stringNum) const
 		{
@@ -86,10 +95,10 @@ static void dumpDatabase(void);
 /*----------------------------------------------------------------------
 	Vars
 	---- */
-static TransHeader *	s_database;
+static TransDB *	s_database;
 static bool				s_loaded;
 static int				s_langType;
-static TransHeader *	s_idDatabase;
+static TransDB *	s_idDatabase;
 static bool				s_idShow;
 /*----------------------------------------------------------------------
 	Data
@@ -129,19 +138,16 @@ void TranslationDatabase::initialise(bool includeIds)
 
 	SYSTEM_DBGMSG("Translation Database allocating %d bytes string space",largestSize);
 
-	s_database=(TransHeader*)MemAlloc(largestSize,"TextDB");
+	s_database=(TransDB*)MemAlloc(largestSize,"TextDB");
 	s_loaded=false;
 
 	if (includeIds)
-		{
+	{
 		int len=CFileIO::getFileSize(TRANSLATIONS_ID_DAT);
-		s_idDatabase=(TransHeader*)MemAlloc(len,"TextID");
-		CFileIO::OpenFile(TRANSLATIONS_ID_DAT);
-		CFileIO::ReadFile(s_idDatabase,len);
-		CFileIO::CloseFile();
-
+		s_idDatabase=(TransDB*)MemAlloc(len,"TextID");
+		s_idDatabase->m_header=(TransHeader*)CFileIO::loadFile(TRANSLATIONS_ID_DAT,"TextHeader");
 		s_idDatabase->relocate();
-		}
+	}
 	else
 		s_idDatabase=NULL;
 }
@@ -236,10 +242,7 @@ static void loadDatabase(FileEquate f)
 {
 	ASSERT(!s_loaded);
 	
-	CFileIO::OpenFile(f);
-	CFileIO::ReadFile(s_database,CFileIO::getFileSize(f));
-	CFileIO::CloseFile();
-
+	s_database->m_header=(TransHeader*)CFileIO::loadFile(TRANSLATIONS_ENG_DAT,"TextHeader");
 	s_database->relocate();
 	s_loaded=true;
 }

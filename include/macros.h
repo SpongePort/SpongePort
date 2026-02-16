@@ -1,5 +1,7 @@
 //#define CUSTOM_ASSETS
 
+#define POINTER(TYPE, BASE, POS) ((TYPE*)BASE+POS)
+
 #ifdef CUSTOM_ASSETS
 
 #define ANIM(ACTOR, NAME) CAssetCache::getActorAnimID(#ACTOR, #NAME)

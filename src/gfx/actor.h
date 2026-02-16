@@ -6,6 +6,7 @@
 #define __ACTOR_HEADER__
 
 #include "system/global.h"
+#include "macros.h"
 #include <dstructs.h>
 
 #ifndef	__BigLump_H__
@@ -139,7 +140,7 @@ virtual	~CActorGfx();
 		POLY_FT4		*RotateScale(POLY_FT4 *Ft4,DVECTOR &Pos,int Angle,int XScale,int YScale,bool Force=false);
 		void			getFrameOffsets(int _anim,int _frame,int *_x,int *_y);
 
-		int				getFrameCount(int Anim)		{return(PoolEntry->ActorGfx->AnimList[Anim].FrameCount);}
+		int				getFrameCount(int Anim)		{return(POINTER(sSpriteAnim, PoolEntry->ActorGfx, PoolEntry->ActorGfx->AnimList))[Anim].FrameCount;}
 		int				GetTotalFrameCount()		{return(PoolEntry->ActorGfx->FrameCount);}
 
 		sBBox			&GetBBox()					{return(BBox);}

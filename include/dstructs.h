@@ -254,13 +254,13 @@ struct	sLevelHdr
 
 	u16			PlayerStartX,PlayerStartY;
 
-	sElem2d		*ElemBank2d;
-	sElem3d		*ElemBank3d;
-	sTri		*TriList;
-	sQuad		*QuadList;
-	sVtx		*VtxList;
-	u16			*VtxIdxList;
-	sModel		*ModelList;
+	u32		ElemBank2d; // sElem2d
+	u32		ElemBank3d; // sElem3d
+	u32		TriList; // sTri
+	u32		QuadList; // sQuad
+	u32		VtxList; // sVtx
+	u32		VtxIdxList; // u16
+	u32		ModelList; // sModel
 };
 
 //***************************************************************************
@@ -269,7 +269,7 @@ struct	sLevelHdr
 // Actors
 struct	sSpriteFrameGfx
 {
-		u8			*PAKSpr;			// 4	Needs to be u32, so might as well make it a ptr
+		u32         PAKSpr;		        // 4	Needs to be u32, ptr is u8
 		s8			AspectX0,AspectX1;	// 2	Aspect correction value 
 		u8			W,H;				// 2
 		u8			W0,W1;				// 2	Need these for rotating :o(
@@ -280,26 +280,25 @@ struct	sSpriteFrame
 {
 		u16		FrameIdx;
 		s8		XOfs,YOfs;
-
 };
 
-struct	sSpriteAnim
+struct sSpriteAnim
 {
 	u16				FrameCount;	// 2
 	u16				Pad;
-	sSpriteFrame	*Anim;		// 4
+	u32             Anim; // 4, sSpriteFrame
 };
 
-struct	sSpriteAnimBank
+struct sSpriteAnimBank
 {
 	u16					Clut;			// 2
 	u16					AnimCount;		// 2
 	u16					FrameCount;		// 2
 	u8					MaxW,MaxH;		// 2
 
-	u8					*Palette;		// 4
-	sSpriteAnim			*AnimList;		// 4
-	sSpriteFrameGfx		*FrameList;		// 4
+	u32					Palette;	    // 4, u8
+	u32					AnimList;	    // 4, sSpriteAnim
+	u32					FrameList;	    // 4, sSpriteFrameGfx
 };
 
 

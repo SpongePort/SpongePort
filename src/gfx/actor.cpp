@@ -12,6 +12,7 @@
 #include "gfx/otpos.h"
 #include "gfx/animtex.h"
 #include "game/game.h"
+#include "macros.h"
 
 #include <dstructs.h>
 
@@ -324,7 +325,7 @@ void	CActorCache::LoadPalette(sActorPool *Actor)
 			R.w=CACHE_PALW;
 			R.h=CACHE_PALH;
 			while(DrawSync(1));
-			LoadImage( &R, (u32*)Actor->ActorGfx->Palette);
+			LoadImage( &R, POINTER(u32, Actor->ActorGfx, Actor->ActorGfx->Palette));
 			Actor->ActorGfx->Clut=getClut(R.x,R.y);
 			CurrentPalette++;
 		}
@@ -426,29 +427,31 @@ sActorPool	*CActorPool::LoadActor(FileEquate Filename)
 int		i;
 int		TotalFrames=0;
 
-sSpriteAnimBank	*Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename,"ActorGfx");
+sSpriteAnimBank *Spr=(sSpriteAnimBank*)CFileIO::loadFile(Filename,"ActorGfx");
 
-		Spr->AnimList=(sSpriteAnim*)		MakePtr(Spr,(int)Spr->AnimList);
-		Spr->FrameList=(sSpriteFrameGfx*)	MakePtr(Spr,(int)Spr->FrameList);
-		Spr->Palette=(u8*)					MakePtr(Spr,(int)Spr->Palette);
+/*
+		Spr->AnimList=(sSpriteAnim*)		MakePtr(Spr,Spr->AnimList);
+		Spr->FrameList=(sSpriteFrameGfx*)	MakePtr(Spr,Spr->FrameList);
+		Spr->Palette=(u8*)					MakePtr(Spr,Spr->Palette);
 
 // FixUp AnimList
 		for (i=0; i<Spr->AnimCount; i++)
 		{
 			sSpriteAnim	*ThisAnim=&Spr->AnimList[i];
-			ThisAnim->Anim=(sSpriteFrame*)	MakePtr(Spr,(int)ThisAnim->Anim);
+			ThisAnim->Anim=(sSpriteFrame*)	MakePtr(Spr,ThisAnim->Anim_offset);
 			TotalFrames+=ThisAnim->FrameCount;
 		}
 
 // FixUp FrameList (not blank ones)
 		for (i=0; i<Spr->FrameCount; i++)
 		{
-			sSpriteFrameGfx	*ThisFrame=&Spr->FrameList[i];
+			sSpriteFrameGfx*ThisFrame=&Spr->FrameList[i];
 			if (ThisFrame->PAKSpr)
 			{
-				ThisFrame->PAKSpr=(u8*)				MakePtr(Spr,(int)ThisFrame->PAKSpr);
+				ThisFrame->PAKSpr=(u8*)				MakePtr(Spr,ThisFrame->PAKSpr);
 			}
 		}
+*/
 
 // Store it
 sActorPool	*NewActor;
@@ -528,10 +531,10 @@ sPoolNode		*ThisNode,*FindNode;
 
 // Calc Frame Ptrs
 sSpriteAnimBank	*SpriteBank=PoolEntry->ActorGfx;
-sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
+sSpriteAnim	*ThisAnim=POINTER(sSpriteAnim, SpriteBank, SpriteBank->AnimList)+Anim;
 
-			CurrentFrame=&ThisAnim->Anim[Frame];
-			CurrentFrameGfx=&SpriteBank->FrameList[CurrentFrame->FrameIdx];
+			CurrentFrame=&POINTER(sSpriteFrame, SpriteBank, ThisAnim->Anim)[Frame];
+			CurrentFrameGfx=&POINTER(sSpriteFrameGfx, SpriteBank, SpriteBank->FrameList)[CurrentFrame->FrameIdx];
 
 			if (!CurrentFrameGfx->PAKSpr) return(0);	// Blank Frame
 
@@ -597,7 +600,7 @@ sSpriteAnim	*ThisAnim=SpriteBank->AnimList+Anim;
 				ThisNode->DstRect.w=CurrentFrameGfx->W>>2;	// div 4 cos 16 color
 				ThisNode->DstRect.h=CurrentFrameGfx->H;
 
-				CPakTex::Add(CurrentFrameGfx->PAKSpr,&ThisNode->DstRect);
+				CPakTex::Add(POINTER(u8, CurrentFrameGfx, CurrentFrameGfx->PAKSpr),&ThisNode->DstRect);
 			}
 		return(ThisNode);
 }
@@ -765,8 +768,8 @@ void	CActorGfx::getFrameOffsets(int _anim,int _frame,int *_x,int *_y)
 	sSpriteFrame	*pFrame;
 
 	SpriteBank=PoolEntry->ActorGfx;
-	ThisAnim=SpriteBank->AnimList+_anim;
-	pFrame=&ThisAnim->Anim[_frame];
+	ThisAnim=POINTER(sSpriteAnim, SpriteBank, SpriteBank->AnimList)+_anim;
+	pFrame=&POINTER(sSpriteFrame, SpriteBank, ThisAnim->Anim)[_frame];
 	*_x=pFrame->XOfs;
 	*_y=pFrame->YOfs;
 }
@@ -786,12 +789,12 @@ u16		*CModelGfx::VtxIdxList;
 /*****************************************************************************/
 void	CModelGfx::SetData(sLevelHdr *LevelHdr)
 {
-		ModelTable=LevelHdr->ModelList;
-		ElemBank=LevelHdr->ElemBank3d;
-		TriList=LevelHdr->TriList;
-		QuadList=LevelHdr->QuadList;
-		VtxList=LevelHdr->VtxList;
-		VtxIdxList=LevelHdr->VtxIdxList;
+		ModelTable=POINTER(sModel, LevelHdr, LevelHdr->ModelList);
+		ElemBank=POINTER(sElem3d, LevelHdr, LevelHdr->ElemBank3d);
+		TriList=POINTER(sTri, LevelHdr, LevelHdr->TriList);
+		QuadList=POINTER(sQuad, LevelHdr, LevelHdr->QuadList);
+		VtxList=POINTER(sVtx, LevelHdr, LevelHdr->VtxList);
+		VtxIdxList=POINTER(u16, LevelHdr, LevelHdr->VtxIdxList);
 }
 
 /*****************************************************************************/
