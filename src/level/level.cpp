@@ -10,6 +10,7 @@
 #include	"gfx/prim.h"
 #include	<dstructs.h>
 #include	"game/game.h"
+#include    "macros.h"
 
 #include	"level/level.h"
 #include	"level/layertile.h"
@@ -208,24 +209,27 @@ sLvlTab *lvlTab=&LvlTable[LevelNo];
 		CSoundMediator::setSong((CSoundMediator::SONGID)lvlTab->songId);
 
 		LevelHdr=(sLevelHdr*)CFileIO::loadFile(lvlTab->LevelFilename,"Level");
-		LevelHdr->ElemBank2d=(sElem2d*)	MakePtr(LevelHdr,(int)LevelHdr->ElemBank2d);
-		LevelHdr->ElemBank3d=(sElem3d*)	MakePtr(LevelHdr,(int)LevelHdr->ElemBank3d);
-		LevelHdr->TriList=(sTri*)		MakePtr(LevelHdr,(int)LevelHdr->TriList);
-		LevelHdr->QuadList=(sQuad*)		MakePtr(LevelHdr,(int)LevelHdr->QuadList);
-		LevelHdr->VtxList=(sVtx*)		MakePtr(LevelHdr,(int)LevelHdr->VtxList);
-		LevelHdr->VtxIdxList=(u16*)		MakePtr(LevelHdr,(int)LevelHdr->VtxIdxList);
-		LevelHdr->ModelList=(sModel*)	MakePtr(LevelHdr,(int)LevelHdr->ModelList);
+		
+		/*
+		LevelStorage->ElemBank2d=POINTER(sElem2d, LevelHdr, LevelHdr->ElemBank2d);
+		LevelStorage->ElemBank3d=POINTER(sElem3d, LevelHdr, LevelHdr->ElemBank3d);
+		LevelStorage->TriList=   POINTER(sTri,    LevelHdr, LevelHdr->TriList);
+		LevelStorage->QuadList=  POINTER(sQuad,   LevelHdr, LevelHdr->QuadList);
+		LevelStorage->VtxList=   POINTER(sVtx,    LevelHdr, LevelHdr->VtxList);
+		LevelStorage->VtxIdxList=POINTER(u16,     LevelHdr, LevelHdr->VtxIdxList);
+		LevelStorage->ModelList= POINTER(sModel,  LevelHdr, LevelHdr->ModelList);
+		*/
 
 // Deal with RGB Tables (and create if none)
 		if (LevelHdr->RGBLayer)
 		{
-			sLayerRGBHdr	*RGBHdr=(sLayerRGBHdr*)	MakePtr(LevelHdr,(int)LevelHdr->RGBLayer+sizeof(sLayerHdr));
-			m_RGBMap=(u8*)			MakePtr(LevelHdr,(int)RGBHdr->RGBMap);
-			m_RGBTable=(u8*)		MakePtr(LevelHdr,(int)RGBHdr->RGBTable);
+			sLayerRGBHdr	*RGBHdr=POINTER(sLayerRGBHdr, LevelHdr, LevelHdr->RGBLayer+sizeof(sLayerHdr));
+			m_RGBMap=POINTER(u8, LevelHdr, RGBHdr->RGBMap);
+			m_RGBTable=POINTER(u8, LevelHdr, RGBHdr->RGBTable);
 		}
 		else
 		{ // Make blank RGB data
-			sLayerHdr	*LayerLayer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
+			sLayerHdr	*LayerLayer=POINTER(sLayerHdr, LevelHdr, LevelHdr->ActionLayer);
 				
 			int	LvlSize=LayerLayer->Width*LayerLayer->Height;
 
@@ -358,7 +362,7 @@ void	CLevel::initLayers()
 // Back
 		if (LevelHdr->BackLayer)
 		{
-			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->BackLayer);
+			sLayerHdr	*Layer=POINTER(sLayerHdr, LevelHdr, LevelHdr->BackLayer);
 			CLayerTile	*NewLayer=new ("Back Layer") CLayerBack(LevelHdr,Layer);
 			NewLayer->init(MapPos,3);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_BACK]=NewLayer;
@@ -367,7 +371,7 @@ void	CLevel::initLayers()
 // Mid
 		if (LevelHdr->MidLayer)
 		{
-			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->MidLayer);
+			sLayerHdr	*Layer=POINTER(sLayerHdr, LevelHdr, LevelHdr->MidLayer);
 			CLayerTile *NewLayer=new ("Mid Layer") CLayerTile(LevelHdr,Layer);
 			NewLayer->init(MapPos,2);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_MID]=NewLayer;
@@ -376,7 +380,7 @@ void	CLevel::initLayers()
 // Action
 		if (LevelHdr->ActionLayer)
 		{
-			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->ActionLayer);
+			sLayerHdr	*Layer=POINTER(sLayerHdr, LevelHdr, LevelHdr->ActionLayer);
 			CLayerTile *NewLayer=new ("Action Layer") CLayerTile3d(LevelHdr,Layer,m_RGBMap,m_RGBTable);
 			NewLayer->init(MapPos,0);
 			TileLayers[CLayerTile::LAYER_TILE_TYPE_ACTION]=NewLayer;
@@ -390,7 +394,7 @@ void	CLevel::initLayers()
 
 		if (LevelHdr->CollisionLayer)
 		{
-			sLayerHdr	*Layer=(sLayerHdr*)MakePtr(LevelHdr,LevelHdr->CollisionLayer);
+			sLayerHdr	*Layer=POINTER(sLayerHdr, LevelHdr, LevelHdr->CollisionLayer);
 			CollisionLayer=new ("Collision Layer") CLayerCollision(Layer);
 			CGameScene::setCollision(CollisionLayer);
 			CreateTileStore();
@@ -403,7 +407,7 @@ void	CLevel::initLayers()
 // Actors
 		if (LevelHdr->ActorList)
 		{
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ActorList);
+			sThingHdr	*Hdr=POINTER(sThingHdr, LevelHdr, LevelHdr->ActorList);
 			ActorCount=Hdr->Count;
 			ActorList=(sThingActor**)MemAlloc(ActorCount*sizeof(sThingActor**),"Actor List");
 			u8	*ThingPtr=(u8*)MakePtr(Hdr,sizeof(sThingHdr));
@@ -418,7 +422,7 @@ void	CLevel::initLayers()
 		if (LevelHdr->PlatformList)
 		{
 
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->PlatformList);
+			sThingHdr	*Hdr=POINTER(sThingHdr, LevelHdr, LevelHdr->PlatformList);
 			PlatformCount=Hdr->Count;
 			PlatformList=(sThingPlatform**)MemAlloc(PlatformCount*sizeof(sThingPlatform**),"Platform List");
 			u8	*ThingPtr=(u8*)MakePtr(Hdr,sizeof(sThingHdr));
@@ -433,7 +437,7 @@ void	CLevel::initLayers()
 // FX
 		if (LevelHdr->FXList)
 		{
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->FXList);
+			sThingHdr	*Hdr=POINTER(sThingHdr, LevelHdr,LevelHdr->FXList);
 			FXCount=Hdr->Count;
 			FXList=(sThingFX*)MakePtr(Hdr,sizeof(sThingHdr));
 		}
@@ -441,7 +445,7 @@ void	CLevel::initLayers()
 // Hazards
 		if (LevelHdr->HazardList)
 		{
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->HazardList);
+			sThingHdr	*Hdr=POINTER(sThingHdr, LevelHdr, LevelHdr->HazardList);
 			HazardCount=Hdr->Count;
 			HazardList=(sThingHazard**)MemAlloc(HazardCount*sizeof(sThingHazard**),"Hazard List");
 			u8	*ThingPtr=(u8*)MakePtr(Hdr,sizeof(sThingHdr));
@@ -463,7 +467,7 @@ void	CLevel::initThings(int _respawningLevel)
 {
 	if (LevelHdr->TriggerList)
 	{
-		sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->TriggerList);
+		sThingHdr	*Hdr=POINTER(sThingHdr, LevelHdr, LevelHdr->TriggerList);
 		TriggerCount=Hdr->Count;
 		TriggerList=(sThingTrigger*)MakePtr(Hdr,sizeof(sThingHdr));
 
@@ -491,7 +495,7 @@ void	CLevel::initThings(int _respawningLevel)
 		{
 			DVECTOR		pos;
 			int			itemNumber;
-			sThingHdr	*Hdr=(sThingHdr*)MakePtr(LevelHdr,LevelHdr->ItemList);
+			sThingHdr	*Hdr=POINTER(sThingHdr, LevelHdr, LevelHdr->ItemList);
 			ItemCount=Hdr->Count;
 			ItemList=(sThingItem*)MakePtr(Hdr,sizeof(sThingHdr));
 			itemNumber=0;

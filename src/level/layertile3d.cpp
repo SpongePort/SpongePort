@@ -8,6 +8,7 @@
 #include 	"utils/utils.h"
 #include 	"gfx/prim.h"
 #include	"game/game.h"
+#include    "macros.h"
 
 #include	"level/layertile.h"
 #include	"level/layertile3d.h"
@@ -100,11 +101,11 @@ sFlipTable	FlipTable[4]=
 /*****************************************************************************/
 CLayerTile3d::CLayerTile3d(sLevelHdr *LevelHdr,sLayerHdr *Hdr,u8 *_RGBMap,u8 *_RGBTable) : CLayerTile(LevelHdr,Hdr)
 {
-		ElemBank3d=LevelHdr->ElemBank3d;
-		TriList=LevelHdr->TriList;
-		QuadList=LevelHdr->QuadList;
-		VtxList=LevelHdr->VtxList;
-		VtxIdxList=LevelHdr->VtxIdxList;
+		ElemBank3d=POINTER(sElem3d, LevelHdr, LevelHdr->ElemBank3d);
+		TriList=POINTER(sTri, LevelHdr, LevelHdr->TriList);
+		QuadList=POINTER(sQuad, LevelHdr, LevelHdr->QuadList);
+		VtxList=POINTER(sVtx, LevelHdr, LevelHdr->VtxList);
+		VtxIdxList=POINTER(u16, LevelHdr, LevelHdr->VtxIdxList);
 		RGBMap=_RGBMap;
 		RGBTable=_RGBTable;
 

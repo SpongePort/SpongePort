@@ -12,6 +12,7 @@
 #include	"level/layertile3d.h"
 #include	"system/vid.h"
 #include	"gfx/actor.h"
+#include    "macros.h"
 
 #include	"fx/fxfallingtile.h"
 
@@ -28,10 +29,10 @@ void	CFXFallingTile::init(DVECTOR const &_Pos)
 		CFX::init();
 sLevelHdr	*LevelHdr=CLevel::getLevelHdr();
 
-		ElemBank3d=LevelHdr->ElemBank3d;
-		TriList=LevelHdr->TriList;
-		QuadList=LevelHdr->QuadList;
-		VtxList=LevelHdr->VtxList;
+		ElemBank3d=POINTER(sElem3d, LevelHdr, LevelHdr->ElemBank3d);
+		TriList=POINTER(sTri, LevelHdr, LevelHdr->TriList);
+		QuadList=POINTER(sQuad, LevelHdr, LevelHdr->QuadList);
+		VtxList=POINTER(sVtx, LevelHdr, LevelHdr->VtxList);
 		Pos=_Pos;
 
 		Velocity.vx=getRndRange(7)-4;

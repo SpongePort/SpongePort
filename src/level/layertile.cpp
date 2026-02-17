@@ -7,6 +7,7 @@
 #include 	"utils/utils.h"
 #include	"system/vid.h"
 #include 	"gfx/prim.h"
+#include    "macros.h"
 
 #include	"level/layertile.h"
 
@@ -38,7 +39,7 @@ CLayerTile::CLayerTile(sLevelHdr *LevelHdr,sLayerHdr *Hdr)
 		MapWidth=LayerHdr->Width;
 		MapHeight=LayerHdr->Height;
 
-		ElemBank2d=LevelHdr->ElemBank2d;
+		ElemBank2d=POINTER(sElem2d, LevelHdr, LevelHdr->ElemBank2d);
 		Map=(sTileMapElem*)MakePtr(Hdr,sizeof(sLayerHdr));
 		
 		PrimBankID=0;
