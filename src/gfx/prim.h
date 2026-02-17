@@ -65,6 +65,8 @@
 #define setSemiTransShadeTexPolyFT4(p)	setlen(p, 9),  setcode(p, 0x2c|GPUCode_SemiTrans|GPUCode_ShadeTex)
 
 /*** Fast Replacements *********************************************************************************/
+
+/*
 #undef	setaddr
 #undef	getaddr
 #define set3(r0,r1) 		({ __asm__ ( "swl %1, 2( %0 )" : : "r"( r0 ), "r"( r1 ) : "memory" ); })
@@ -80,6 +82,7 @@
 	:											\
 	: "r"( r0 ), "r"( r1 )						\
 	: "$12", "memory" )
+*/
 
 
 #ifdef	USE_NTAGS
@@ -148,10 +151,11 @@ inline void UnlinkNTagtoNTag(sOT *to, sOT *from, long count)
 /*** OTag Stuff **************************************************************************************/
 typedef	u32	sOT;
 
+/*
 #undef	addPrim
 #define	AddPrim		addPrim
 #define	AddPrim		addPrim
-/*#define	addPrim( r0, r1 ) __asm__  (			\
+#define	addPrim( r0, r1 ) __asm__  (			\
 	"lwl	$12, 2( %0 );"						\
 	"sll	$13, %1, 8;"						\
 	"swl	$13, 2( %0 );"						\
@@ -159,12 +163,12 @@ typedef	u32	sOT;
 	:											\
 	: "r"( r0 ), "r"( r1 )						\
 	: "$12", "$13", "memory" )
-*/
 #warning addPrim(r0,r1): Unimplemented
 #define addPrim(r0,r1) {}
 #undef	addPrims
 #define	AddPrims	addPrims
 #warning addPrims(r0,r1,r2): Unimplemented
+*/
 /*
 #define	addPrims( r0, r1, r2 ) __asm__  (		\
 	"lwl	$12, 2( %0 );"						\
@@ -175,7 +179,7 @@ typedef	u32	sOT;
 	: "r"( r0 ), "r"( r1 ), "r"( r2 )			\
 	: "$12", "$13", "memory" )
 */
-#define addPrims(r0,r1, r2) {}
+//#define addPrims(r0,r1, r2) {}
 #define	InitOTag(Ot, Count)						ClearOTag(Ot,Count);
 #define	InitOTagR(Ot, Count)					ClearOTagR(Ot,Count);
 #define	ResetOTag(Ot, Count)					InitOTag(Ot,Count);
