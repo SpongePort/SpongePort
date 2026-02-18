@@ -7,10 +7,13 @@
 #include "gfx/animtex.h"
 #include "gfx/prim.h"
 #include "system/vid.h"
+
+#ifdef TARGET_PC
 extern "C" 
 {
 #include <PsyX/PsyX_public.h>
 }
+#endif
 
 /*****************************************************************************/
 sOT 		*OtList[2],*OtPtr;
@@ -39,7 +42,9 @@ void	PrimInit()
 	InitOTagR(OtList[0],MAX_OT);
 	InitOTagR(OtList[1],MAX_OT);
 
+#ifdef TARGET_PC
 	PsyX_BeginScene();
+#endif
 }
 
 
@@ -62,7 +67,9 @@ void	PrimDisplay()
 	DrawOTag(OtPtr+(MAX_OT-1));
 #endif
 
+#ifdef TARGET_PC
 	PsyX_EndScene();
+#endif
 
 	PrimFlipFlag^=1;
 	OtPtr=(sOT*)OtList[PrimFlipFlag];

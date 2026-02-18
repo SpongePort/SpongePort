@@ -66,7 +66,8 @@
 
 /*** Fast Replacements *********************************************************************************/
 
-/*
+#ifdef TARGET_PSX
+
 #undef	setaddr
 #undef	getaddr
 #define set3(r0,r1) 		({ __asm__ ( "swl %1, 2( %0 )" : : "r"( r0 ), "r"( r1 ) : "memory" ); })
@@ -82,7 +83,8 @@
 	:											\
 	: "r"( r0 ), "r"( r1 )						\
 	: "$12", "memory" )
-*/
+
+#endif
 
 
 #ifdef	USE_NTAGS
@@ -151,7 +153,8 @@ inline void UnlinkNTagtoNTag(sOT *to, sOT *from, long count)
 /*** OTag Stuff **************************************************************************************/
 typedef	u32	sOT;
 
-/*
+#ifdef TARGET_PSX
+
 #undef	addPrim
 #define	AddPrim		addPrim
 #define	AddPrim		addPrim
@@ -163,13 +166,9 @@ typedef	u32	sOT;
 	:											\
 	: "r"( r0 ), "r"( r1 )						\
 	: "$12", "$13", "memory" )
-#warning addPrim(r0,r1): Unimplemented
-#define addPrim(r0,r1) {}
+
 #undef	addPrims
 #define	AddPrims	addPrims
-#warning addPrims(r0,r1,r2): Unimplemented
-*/
-/*
 #define	addPrims( r0, r1, r2 ) __asm__  (		\
 	"lwl	$12, 2( %0 );"						\
 	"sll	$13, %1, 8;"						\
@@ -178,8 +177,10 @@ typedef	u32	sOT;
 	:											\
 	: "r"( r0 ), "r"( r1 ), "r"( r2 )			\
 	: "$12", "$13", "memory" )
-*/
-//#define addPrims(r0,r1, r2) {}
+
+
+#endif
+
 #define	InitOTag(Ot, Count)						ClearOTag(Ot,Count);
 #define	InitOTagR(Ot, Count)					ClearOTagR(Ot,Count);
 #define	ResetOTag(Ot, Count)					InitOTag(Ot,Count);

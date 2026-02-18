@@ -10,6 +10,10 @@
 #include "system/global.h"
 #endif
 
+#ifdef TARGET_PC
+#define USE_CPP_MEM
+#endif
+
 
 /*****************************************************************************/
 // Define if you want to debug memory

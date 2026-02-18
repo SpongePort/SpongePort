@@ -2,23 +2,7 @@
 /*** PSX Main ***/
 /****************/
 
-#include <PsyX/PsyX_public.h>
-
-#include 	<types.h>
-#include 	<libapi.h>
-#include 	<libetc.h>
-#include 	<libgte.h>
-#include 	<libgpu.h>
-#include    <libcd.h>
-#include    <libmcrd.h>
-#include	<kernel.h>
-#include	<libspu.h>
-#include	<memory.h>
-// #include	<libsnd.h>
-
-#ifdef WIN32
-#include    <windows.h>
-#endif
+#include <libmcrd.h>
 
 #include 	"system/global.h"
 #include 	"fileio/fileio.h"
@@ -100,18 +84,6 @@ CPaulScene s_paulScene;
 #include "memcard/saveload.h"
 #endif
 
-#ifndef __PSXBOOT_PSXBOOT_H_
-#include "PSXBOOT.H"
-#endif
-
-#ifndef __FILEIO_FILETAB_H_
-#include "fileio/filetab.h"
-#endif
-
-
-#define USE_OPENAL
-#define WIN32
-
 
 #if	__FILE_SYSTEM__==PC
 	#if	!defined(__USER_CDBUILD__)
@@ -127,7 +99,7 @@ static SpriteBank	GenericSpriteBank;
 
 /*****************************************************************************/
 
-void	SaveScreen(RECT16 R);
+void	SaveScreen(RECT R);
 
 /*****************************************************************************/
 static void DoAutoLoad()
@@ -252,8 +224,6 @@ void	MainLoop()
 		VidSwapDraw();
 		PrimDisplay();
 
-		PsyX_UpdateInput();
-
 		CPadVibrationManager::think(frames);
 		PadUpdate();
 
@@ -275,64 +245,6 @@ void	MainLoop()
 }
 
 /*****************************************************************************/
-
-DB		*CurDBuf,DBuf[2];
-
-/*****************************************************************************/
-/*** System Stuff ************************************************************/
-/*****************************************************************************/
-void 	InitSys(void)
-		{
-int 	Count;
-		ResetCallback();
-		ResetGraph(0);
-		SetGraphDebug(0);
-		while (!CdInit());
-//		InitGeom();
-		CdSetDebug(0);
-//		SpuInit();
-		//SsInit();
-
-#if		defined(__TERRITORY_USA__)
-		SetVideoMode(MODE_NTSC);
-#else
-		SetVideoMode(MODE_PAL);
-#endif
-
-		SetDefDrawEnv(&DBuf[0].draw, 0,0, FRAME_X, FRAME_Y);
-		SetDefDispEnv(&DBuf[0].disp, 0,0, FRAME_X, FRAME_Y);
-		SetDefDrawEnv(&DBuf[1].draw, 0,0, FRAME_X, FRAME_Y);
-		SetDefDispEnv(&DBuf[1].disp, 0,0, FRAME_X, FRAME_Y);
-
-		setRECT(&DBuf[0].disp.screen, SCREEN_X, SCREEN_Y, 0, FRAME_Y);
-		setRECT(&DBuf[1].disp.screen, SCREEN_X, SCREEN_Y, 0, FRAME_Y);
-		DBuf[0].disp.isrgb24=DBuf[1].disp.isrgb24=0;
-		DBuf[0].draw.isbg = DBuf[1].draw.isbg = 1;
-		CurDBuf=DBuf;
-
-#if		!defined(__TERRITORY_USA__)
-		DBuf[0].disp.screen.y=24;
-		DBuf[1].disp.screen.y=24;
-#else
-		DBuf[0].disp.screen.y=16;
-		DBuf[1].disp.screen.y=16;
-#endif
-
-// Stop flicker!!
-		Count=2;
-		while(Count--)
-			{
-			PutDrawEnv(&CurDBuf->draw);
-			PutDispEnv(&CurDBuf->disp);
-			DrawSync(0);
-			}
-		DBuf[0].draw.isbg = DBuf[1].draw.isbg = 0;
-
-		SetDispMask(1);
-
-		}
-
-/*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 #if	defined(__USER_daveo__)
@@ -340,33 +252,8 @@ int 	Count;
 int			TestFMA=-1;
 #endif
 
-extern "C"
+int 	main()
 {
-
-int SDL_main(int argc, char *argv[])
-{
-	FILE* file;
-	file = fopen("baserom.bin", "r");
-	if (file)
-		fclose(file);
-	else
-	{
-#ifdef WIN32
-		MessageBox(
-			GetActiveWindow(),
-			"Couldn't find the CD image! Please place baserom.bin in the game's directory",
-			"Error",
-			MB_ICONERROR | MB_OK
-		);
-#endif
-		return 1;
-	}
-	PsyX_CDFS_Init("baserom.bin", 0, 0);
-	
-	PsyX_Initialise("SpongeBob SquarePants", 640, 480, 0);
-        
-	InitSys();
-	//CalcFilePos(FilePositions);
 	CFileIO::GetAllFilePos();
 	InitSystem();
 	
@@ -392,11 +279,7 @@ int SDL_main(int argc, char *argv[])
 //	CXAStream::Init();			// PKG - Stuck here so that it doesn't affect any startup stuff (7/8/00)
 	MainLoop();
 
-	PsyX_Shutdown();
-
 	return(0);
-
-}
 
 }
 
@@ -434,7 +317,7 @@ bool FileExists(char const * Name)
 		return false;
 }
 
-void SaveScreen(RECT16 SR)
+void SaveScreen(RECT SR)
 {
 int				FileHnd;
 static	int		ScreenNo=0;

@@ -2,6 +2,7 @@ VERSION := DEBUG
 TERRITORY := USA
 USER := CDBUILD
 FILE_SYSTEM := CD
+TARGET := PC
 
 CC := g++
 LD := g++
@@ -17,10 +18,8 @@ DEFS :=  	-D__USER_$(USER)__ \
 			-D__VERSION_STR__=$(VERSION) \
 			-D__TERRITORY_STR__=$(TERRITORY) \
 			-D__FILE_SYSTEM__=$(FILE_SYSTEM) \
-			-DUSE_OPENAL \
-			-D_LANGUAGE_C_PLUS_PLUS \
-			-DUSE_CPP_MEM \
-			-DWIN32
+			-DTARGET_${TARGET} \
+			-D_LANGUAGE_C_PLUS_PLUS
 
 CCFLAGS := 	-w \
 			-g \
@@ -40,8 +39,9 @@ EXE := Spongey_Win.exe
 
 SRC_DIR := src
 BUILD_DIR := build
+TARGET_DIR := $(shell echo $(TARGET) | tr A-Z a-z)
 
-SRCS := $(wildcard $(SRC_DIR)/**/*.cpp)
+SRCS := $(filter-out $(wildcard $(SRC_DIR)/**/main.cpp), $(wildcard $(SRC_DIR)/**/*.cpp)) $(SRC_DIR)/$(TARGET_DIR)/main.cpp
 OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/obj/%.o,$(SRCS))
 
 .PHONY: psyx clean
