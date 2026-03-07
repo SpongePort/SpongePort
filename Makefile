@@ -15,15 +15,15 @@ INCS :=  	-Iinclude \
 DEFS :=  	-D__USER_$(USER)__ \
 			-D__VERSION_$(VERSION)__ \
 			-D__TERRITORY_$(TERRITORY)__ \
+			-D__FILE_SYSTEM_$(FILE_SYSTEM)__ \
 			-D__VERSION_STR__=$(VERSION) \
 			-D__TERRITORY_STR__=$(TERRITORY) \
-			-D__FILE_SYSTEM__=$(FILE_SYSTEM) \
+			-D__FILE_SYSTEM_STR__=$(FILE_SYSTEM) \
 			-DTARGET_${TARGET} \
 			-D_LANGUAGE_C_PLUS_PLUS
 
 CCFLAGS := 	-w \
 			-g \
-			-O2 \
 			-fpermissive \
 			$(shell sdl2-config --cflags) \
 			$(INCS) \

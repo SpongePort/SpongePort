@@ -21,7 +21,7 @@
 // You will need a CD with Track1 synced to something, oh, and a CD drive
 //#define	FORCE_XA	1	
 
-#if		__FILE_SYSTEM__==CD | FORCE_XA 
+#if	__FILE_SYSTEM_CD__ | FORCE_XA 
 #define	ENABLE_XA	
 #endif
 

@@ -242,24 +242,25 @@ char *__getDbgLineFromLog(int _line)
 
 
 #ifdef __VERSION_DEBUG__
+
+#ifdef TARGET_PSX
 #define OnScreenDebug
+#endif
+
 #include "gfx/font.h"
-#include 	"system/vid.h"
-#include 	"gfx/prim.h"
+#include "system/vid.h"
+#include "gfx/prim.h"
 
 /*****************************************************************************/
 void DoAssert( const char * Txt, const char * file, const int line )
 {
-#ifdef	WIN32
-	char msg[2048];
-	sprintf(msg, "Assertion failed: %s\n%s:%d", Txt, file, line);
-	printf(msg);
+	printf("Assertion failed: %s (at %s:%d)", Txt, file, line);
+
+#ifdef TARGET_PC
 	abort();
-#else
-	printf( "%s", Txt );
+#endif
 
-#ifdef	OnScreenDebug
-
+#ifdef OnScreenDebug
 	FontBank	F;
 	char		Text[2048];
 
@@ -288,9 +289,6 @@ void DoAssert( const char * Txt, const char * file, const int line )
 	while(DrawSync(1));
 
 	F.dump();
-
-#endif
-	//PSYQpause();
 #endif
 }
 
@@ -298,7 +296,7 @@ void DoAssert( const char * Txt, const char * file, const int line )
 void	DbgPollHost()
 {
 #ifndef __CLIMAX_DEVKIT__
-	#if			__FILE_SYSTEM__==PC
+	#if	__FILE_SYSTEM_PC__
 //		pollhost();
 	#endif
 #endif

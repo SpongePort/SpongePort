@@ -4,7 +4,7 @@
 
 #include	"system/global.h"
 #include	"fileio/fileio.h"
-#if			__FILE_SYSTEM__==PC
+#if	__FILE_SYSTEM_PC__
 #include	"fileio/pcfile.h"
 #else
 #include	"fileio/cdfile.h"
@@ -12,13 +12,14 @@
 #include	"utils/replace.h"
 #include	"utils/utils.h"
 
-//#define	FILEIO_DBG
+#ifdef __VERSION_DEBUG__
+#define	FILEIO_DBG
+#endif
 
 #ifdef	FILEIO_DBG
-#define	FILEIO_DBGMSG	SYSTEM_DBGMSG
+#define	FILEIO_DBGMSG SYSTEM_DBGMSG
 #else
-#define	FILEIO_DBGMSG	//
-
+#define	FILEIO_DBGMSG // 
 #endif
 
 char	*LumpNames[]=
@@ -68,7 +69,7 @@ void	CFileIO::Init()
 {
 #ifndef EXTERNAL_ASSETS
 
-#if		__FILE_SYSTEM__==PC
+#if	__FILE_SYSTEM_PC__
 		FileIO=new ("CFileIO::FileIOInit") CPCFileIO(LumpNames[DataLump],&BigLump);
 #else
 		FileIO=new ("CFileIO::FileIOInit") CCDFileIO(0,&BigLump);
@@ -400,18 +401,18 @@ void	CFileIO::FindAllFilePos()
 // File positions are passed by Bootstrap VIA Scratch Ram (nice!)
 void	CFileIO::GetAllFilePos()
 {
-#if !defined(__USER_PCBUILD__)
+#ifdef TARGET_PSX
 int	*Pos=(int*)SCRATCH_RAM;
 #endif
 
 	for (int Loop=0;Loop<FILEPOS_MAX;Loop++)	
-		{
-//#if defined(__USER_PCBUILD__)
-          FilePosList[Loop]=FilePositions[Loop];
-//#else
-//          FilePosList[Loop]=*Pos++;
-//#endif
-		}
+	{
+#ifdef TARGET_PC
+		FilePosList[Loop]=FilePositions[Loop];
+#else
+		FilePosList[Loop]=*Pos++;
+#endif
+	}
 
 }
 

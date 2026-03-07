@@ -113,7 +113,7 @@ CPaulScene s_paulScene;
 #define WIN32
 
 
-#if	__FILE_SYSTEM__==PC
+#if	__FILE_SYSTEM_PC__
 	#if	!defined(__USER_CDBUILD__)
 		#if defined(__VERSION_DEBUG__)
 			#define	USE_SCREEN_UTILS
@@ -194,6 +194,8 @@ void	InitSystem()	// reordered to reduce black screen (hope all is well
 
 	CActorPool::AddActor(ACTORS_SPONGEBOB_SBK);
 	StopLoad();
+
+	printf("fuck off");
 
 	// Autoload? Who wants that in this day and age!? Pah! Autoload.. schmautoload!
 //#if defined(__USER_paul__) || defined(__USER_CDBUILD__)

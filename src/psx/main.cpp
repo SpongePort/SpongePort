@@ -85,7 +85,7 @@ CPaulScene s_paulScene;
 #endif
 
 
-#if	__FILE_SYSTEM__==PC
+#if	__FILE_SYSTEM_PC__
 	#if	!defined(__USER_CDBUILD__)
 		#if defined(__VERSION_DEBUG__)
 			#define	USE_SCREEN_UTILS

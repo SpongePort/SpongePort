@@ -39,17 +39,13 @@
 	---------- */
 #include "VLC_BIT.H"
 
+// #define FORCE_FMV
 
-#undef	FORCE_FMV
-#undef  ENABLE_FMV
-
-#if		__FILE_SYSTEM__==CD | FORCE_FMV
-//#define	ENABLE_FMV	
+#ifdef TARGET_PSX
+#if	__FILE_SYSTEM_CD__ | FORCE_FMV
+#define	ENABLE_FMV	
 #endif
-
-//#if		defined(__USER_CDBUILD__)
-//#undef	FORCE_FMV
-//#endif
+#endif
 
 /*	Graphics
 	-------- */
