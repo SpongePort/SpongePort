@@ -50,7 +50,7 @@ all: psyx $(BUILD_DIR)/$(EXE)
 
 psyx:
 	@mkdir -p $(BUILD_DIR)/psyx
-	cmake -S psyx -B build/psyx
+	cmake -DCMAKE_BUILD_TYPE=Debug -S psyx -B build/psyx
 	cmake --build build/psyx
 
 clean:

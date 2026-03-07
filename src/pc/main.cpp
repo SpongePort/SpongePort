@@ -239,7 +239,10 @@ void	MainLoop()
 		s_paulScene.think(frames);
 #endif
 
-// Render States		
+// Render States
+
+		PsyX_BeginScene();
+
 		CFader::render();
 		GameState::render();
 		CBubicleFactory::render();
@@ -250,7 +253,10 @@ void	MainLoop()
 
 		while(DrawSync(1));
 		VidSwapDraw();
+		
 		PrimDisplay();
+
+		PsyX_EndScene();
 
 		PsyX_UpdateInput();
 
