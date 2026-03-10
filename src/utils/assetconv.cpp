@@ -293,3 +293,34 @@ void Assets_ConvertLumpToPak(const char* inFileName, const char* outFileName)
     fclose(inFile);
     fclose(outFile);
 }
+
+void Assets_ExtractAssets(const char* inFileName, const char* outDirectory)
+{
+    sFAT lumpEntry;
+    FILE* outFile;
+    FILE* inFile = fopen(inFileName, "rb");
+    char outPath[256];
+    int bytesRead = 0;
+
+    for (int i = 0; i < FileEquate_MAX; i++)
+    {
+        // Read entry
+        fread(&lumpEntry, sizeof(sFAT), 1, inFile);
+
+        long oldPos = ftell(inFile);
+        fseek(inFile, lumpEntry.FilePos, SEEK_SET);
+
+        sprintf(outPath, "%s/%s", outDirectory, ASSET_FILENAMES[i]);
+        outFile = fopen(outPath, "wb");
+        while (bytesRead < lumpEntry.FileSize)
+        {
+            fread(&copyBuffer, 2048, 1, inFile);
+            fwrite(&copyBuffer, 2048, 1, outFile);
+            bytesRead += 2048;
+        }
+        bytesRead = 0;
+        fclose(outFile);
+
+        fseek(inFile, oldPos, SEEK_SET);
+    }
+}

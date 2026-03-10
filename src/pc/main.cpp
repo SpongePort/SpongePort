@@ -367,7 +367,10 @@ int SDL_main(int argc, char *argv[])
 #endif
 		return 1;
 	}
+
+#ifdef __FILE_SYSTEM_CD__
 	PsyX_CDFS_Init("baserom.bin", 0, 0);
+#endif
 	
 	PsyX_Initialise("SpongeBob SquarePants", 640, 480, 0);
         
