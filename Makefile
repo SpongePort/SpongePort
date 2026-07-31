@@ -2,14 +2,9 @@ VERSION := DEBUG
 TERRITORY := USA
 USER := CDBUILD
 FILE_SYSTEM := PC
-TARGET := PC
-
-CC := g++
-LD := g++
+PLATFORM := PC
 
 INCS :=  	-Iinclude \
-			-Ipsyx/include \
-			-Ipsyx/include/psx \
 			-Isrc
 
 DEFS :=  	-D__USER_$(USER)__ \
@@ -22,43 +17,19 @@ DEFS :=  	-D__USER_$(USER)__ \
 			-DTARGET_${TARGET} \
 			-D_LANGUAGE_C_PLUS_PLUS
 
-CCFLAGS := 	-w \
+TARGET = SpongeBob
+TYPE = ps-exe
+CFLAGS :=	-std=gnu11 \
+			-w \
 			-g \
 			-fpermissive \
-			$(shell sdl2-config --cflags) \
 			$(INCS) \
 			$(DEFS)
 
-LDFLAGS =   -L$(BUILD_DIR)/psyx \
-			-lpsycross \
-			$(shell sdl2-config --libs) \
-			-lopenal \
-
-
-EXE := Spongey_Win.exe
-
 SRC_DIR := src
 BUILD_DIR := build
-TARGET_DIR := $(shell echo $(TARGET) | tr A-Z a-z)
+PLATFORM_DIR := $(shell echo $(PLATFORM) | tr A-Z a-z)
 
-SRCS := $(filter-out $(wildcard $(SRC_DIR)/**/main.cpp), $(wildcard $(SRC_DIR)/**/*.cpp)) $(SRC_DIR)/$(TARGET_DIR)/main.cpp
-OBJS := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/obj/%.o,$(SRCS))
+SRCS := $(filter-out $(wildcard $(SRC_DIR)/**/main.cpp), $(wildcard $(SRC_DIR)/**/*.cpp)) $(SRC_DIR)/$(PLATFORM_DIR)/main.cpp
 
-.PHONY: psyx clean
-
-all: psyx $(BUILD_DIR)/$(EXE)
-
-psyx:
-	@mkdir -p $(BUILD_DIR)/psyx
-	cmake -DCMAKE_BUILD_TYPE=Debug -S psyx -B build/psyx
-	cmake --build build/psyx
-
-clean:
-	rm -rf $(BUILD_DIR)
-
-$(BUILD_DIR)/obj/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p ${@D}
-	$(CC) $(CCFLAGS) -c $< -o $@
-
-$(BUILD_DIR)/$(EXE): $(OBJS)
-	$(LD) -o $@ $^ $(LDFLAGS)
+include psyz/psyz/psx.mk
