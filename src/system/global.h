@@ -5,6 +5,7 @@
 #ifndef _GLOBAL_HEADER_
 #define _GLOBAL_HEADER_
 
+#include <psyz.h>
 #include 	<stddef.h>
 #include 	<stdlib.h>
 #include 	<stdio.h>
@@ -14,15 +15,15 @@ extern "C"
 #include 	<libetc.h>
 #include 	<libgte.h>
 #include 	<libgpu.h>
-#include 	<libsn.h>
+#include 	<libsnd.h>
 #include 	<libcd.h>
 #include 	<libspu.h>
 #include 	<libapi.h>
-#include 	<inline_c.h>
+//#include 	<inline_c.h>
 #include 	<sys/types.h>
 }
 #include 	"utils/replace.h"
-#include 	<gtemac.h>
+//#include 	<gtemac.h>
 
 /*****************************************************************************/
 #define SCRATCH_RAM 		0x1f800000

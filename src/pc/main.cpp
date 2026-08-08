@@ -2,7 +2,7 @@
 /*** PSX Main ***/
 /****************/
 
-#include <PsyX/PsyX_public.h>
+#include <psyz.h>
 
 #include 	<types.h>
 #include 	<libapi.h>
