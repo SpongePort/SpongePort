@@ -24,7 +24,7 @@ static	int		GetSpeed();
 
 private:
 		CAnimTex	*NextTex;
-		RECT16		Rect;
+		RECT		Rect;
 		s16			Speed,Count;
 		s16			PixPerWord;
 		u32			*TexData;
@@ -48,11 +48,11 @@ public:
 
 static	void	Init(int MaxSize);
 static	void	Shutdown();
-static	void	Add(u8 *PakSpr,RECT16 *DstRect);
+static	void	Add(u8 *PakSpr,RECT *DstRect);
 static	void	DMAPakTex();
 protected:
 		u8		*PakSpr;
-		RECT16	*DstRect;
+		RECT	*DstRect;
 private:
 static	CPakTex	PakTexList[];
 static	int		PakTexCount;

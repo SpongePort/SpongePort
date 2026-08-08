@@ -55,7 +55,7 @@ public:
 	static void			setCharacterAndText(int _characterId,int _textId);
 	static void			setResponseOptions(int _responseOptions);
 	static int			getResponse();
-	static RECT16			getTextRegion();
+	static RECT			getTextRegion();
 
 	static void			ignoreNewlyPressedButtonsOnPadThisThink();
 

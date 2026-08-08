@@ -70,7 +70,7 @@ void	TPInit()
 void TPFree( const TPAGE_DESC & desc,int Invalidate)
 {
 #if		defined(INVALIDATE_CACHE)
-RECT16	R;
+RECT	R;
 		setRECT(&R,(desc.tpage&0xf)*TPRawW,(desc.tpage>15)*TPRawH,64,128);
 		Invalidate=1;
 #endif
@@ -160,7 +160,7 @@ sTPageInfo	*Cache=&s_TPCache[TPage].Info[Half];
 /*****************************************************************************/
 void	TPLoadVRam(sTPageHdr *TPHdr, int TPage, int Half, u32 *VRamData)
 {
-RECT16		Rect;
+RECT		Rect;
 
 // Read and DMA TP to VRam
 		Rect.x=(TPage%16)*TPRawW;

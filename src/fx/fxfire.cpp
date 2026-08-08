@@ -99,10 +99,10 @@ int			FYO=0;
 		Ft4=GetPrimFT4();
 		*Ft4=*Frame;
 		AddPrimToList(Ft4,OtPos);
-		Ft4->x0.sh+=FXO; Ft4->y0.sh+=FYO; 
-		Ft4->x1.sh+=FXO; Ft4->y1.sh+=FYO; 
-		Ft4->x2.sh+=FXO; Ft4->y2.sh+=FYO; 
-		Ft4->x3.sh+=FXO; Ft4->y3.sh+=FYO; 
+		Ft4->x0+=FXO; Ft4->y0+=FYO; 
+		Ft4->x1+=FXO; Ft4->y1+=FYO; 
+		Ft4->x2+=FXO; Ft4->y2+=FYO; 
+		Ft4->x3+=FXO; Ft4->y3+=FYO; 
 
 }
 

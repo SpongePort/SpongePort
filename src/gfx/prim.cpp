@@ -73,10 +73,10 @@ void	FlushPrimPool()
 }
 
 /*** Clipping ****************************************************************/
-void	PrimClip(RECT16 *R, u32 Depth)
+void	PrimClip(RECT *R, u32 Depth)
 {
 DR_AREA 	*CPtr=(DR_AREA*)CurrPrim;
-RECT16 		Real;
+RECT 		Real;
 sVidScreen	*Scr=VidGetDrawScreen();
 
 	Real=*R;
@@ -96,7 +96,7 @@ sVidScreen	*Scr=VidGetDrawScreen();
 /*---------------------------------------------------------------------------*/
 void PrimFullScreen(int Depth)
 {
-RECT16	FullScreenRect={0,0,VidGetScrW(),VidGetScrH()};
+RECT	FullScreenRect={0,0,VidGetScrW(),VidGetScrH()};
 		PrimClip(&FullScreenRect,Depth);
 }
 

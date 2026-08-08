@@ -78,7 +78,8 @@ extern MATRIX *TransposeMatrix(MATRIX *m0,MATRIX *m1);
 inline	void InverseMatrix(MATRIX *m, MATRIX &im)	//assumes no scale, just transformation and rotation
 {
 	TransposeMatrix(m, &im);
-	ApplyMatrixLV(&im, (VECTOR*)&m->t[0], (VECTOR*)&im.t[0]);
+	// TODO: ApplyMatrixLV
+	//ApplyMatrixLV(&im, (VECTOR*)&m->t[0], (VECTOR*)&im.t[0]);
 	im.t[0] = -im.t[0];
 	im.t[1] = -im.t[1];
 	im.t[2] = -im.t[2];
@@ -356,44 +357,46 @@ u32 testdiv;
 	return(root);
 }
 
+// TODO: reimplement vector math
+
 
 /*****************************************************************************/
 inline u32		CalcLength(const SVECTOR *s)
 {
-int		Dt;
-		gte_ldsv(s);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+int		Dt = 0;
+//		gte_ldsv(s);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(Dt);
 }
 
 /*****************************************************************************/
 inline u32		CalcLengthSquared(const SVECTOR *s)
 {
-u32		Dt;
-		gte_ldsv(s);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+u32		Dt = 0;
+//		gte_ldsv(s);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(Dt);
 }
 
 /*****************************************************************************/
 inline u32		CalcLengthV(const VECTOR *s)
 {
-u32		Dt;
-		gte_ldlvl(s);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+u32		Dt = 0;
+//		gte_ldlvl(s);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
 /*****************************************************************************/
 inline u32		CalcLengthSquaredV(const VECTOR *s)
 {
-u32		Dt;
-		gte_ldlvl(s);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+u32		Dt = 0;
+//		gte_ldlvl(s);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(Dt);
 }
 
@@ -403,11 +406,11 @@ inline u32		CalcDist(const SVECTOR *s, const SVECTOR *e)
 s32		Dx = s->vx - e->vx;
 s32		Dy = s->vy - e->vy;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXYZ(Dx,Dy,Dz);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+//		CMX_ldXYZ(Dx,Dy,Dz);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
@@ -416,11 +419,11 @@ inline u32		CalcDistXZ(const SVECTOR *s, const SVECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
@@ -430,11 +433,11 @@ inline u32		CalcDistV(const VECTOR *s, const VECTOR *e)
 s32		Dx = s->vx - e->vx;
 s32		Dy = s->vy - e->vy;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXYZ(Dx,Dy,Dz);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+//		CMX_ldXYZ(Dx,Dy,Dz);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
@@ -443,11 +446,11 @@ inline u32		CalcDistV(const VECTOR *s, const VECTOR *e, u16 shift)
 {
 s32		Dx = (s->vx - e->vx) >> shift;
 s32		Dz = (s->vz - e->vz) >> shift;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt) << shift);
 }
 
@@ -456,10 +459,10 @@ inline u32		CalcDistXZV(const VECTOR *s, const VECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
+u32		Dt = 0;
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
@@ -468,12 +471,14 @@ inline u32		CalcDistXZVSquared(const VECTOR *s, const VECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
-		return ABS(Dt);
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
+		// TODO: ABS
+		//return abs(Dt);
+		return Dt;
 }
 
 /*****************************************************************************/
@@ -481,11 +486,11 @@ inline u32		CalcDistXZV(const VECTOR *s, const VECTOR *e, u16 shift)
 {
 s32		Dx = (s->vx - e->vx) >> shift;
 s32		Dz = (s->vz - e->vz) >> shift;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt) << shift);
 }
 
@@ -505,11 +510,11 @@ inline u32		CalcDist(const sShortXYZ *s, const sShortXYZ *e)
 s32		Dx = s->vx - e->vx;
 s32		Dy = s->vy - e->vy;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXYZ(Dx,Dy,Dz);
-		gte_sqr0();
-		CMX_StVecXYZMag(&Dt);
+//		CMX_ldXYZ(Dx,Dy,Dz);
+//		gte_sqr0();
+//		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
@@ -518,11 +523,11 @@ inline u32		CalcDistXZ(const sShortXYZ *s, const sShortXYZ *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt));
 }
 
@@ -531,11 +536,11 @@ inline u32		CalcDistXZSquared(const sShortXYZ *s, const sShortXYZ *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt;
+u32		Dt = 0;
 
-		CMX_ldXZ(Dx,Dz);
-		gte_sqr0();
-		CMX_StVecXZMag(&Dt);
+//		CMX_ldXZ(Dx,Dz);
+//		gte_sqr0();
+//		CMX_StVecXZMag(&Dt);
 		return(Dt);
 }
 /*****************************************************************************/

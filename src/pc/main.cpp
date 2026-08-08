@@ -127,7 +127,7 @@ static SpriteBank	GenericSpriteBank;
 
 /*****************************************************************************/
 
-void	SaveScreen(RECT16 R);
+void	SaveScreen(RECT R);
 
 /*****************************************************************************/
 static void DoAutoLoad()
@@ -443,7 +443,7 @@ bool FileExists(char const * Name)
 		return false;
 }
 
-void SaveScreen(RECT16 SR)
+void SaveScreen(RECT SR)
 {
 int				FileHnd;
 static	int		ScreenNo=0;

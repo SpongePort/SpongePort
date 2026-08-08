@@ -118,7 +118,7 @@ CAnimTex	*PrevTex, *ThisTex, *NextTex;
 void	CAnimTex::AnimateTex()
 {
 CAnimTex	*ThisTex=AnimTexList;
-RECT16		Rect;
+RECT		Rect;
 int			Count,CountComp;
 int			H,W;
 int			Time = GameState::getFramesSinceLast();
@@ -199,7 +199,7 @@ void	CPakTex::Shutdown()
 }
 
 /*****************************************************************************/
-void	CPakTex::Add(u8 *PakSpr,RECT16 *DstRect)
+void	CPakTex::Add(u8 *PakSpr,RECT *DstRect)
 {
 		ASSERT(PakTexCount<PAKTEX_MAX);
 		PakTexList[PakTexCount].PakSpr=PakSpr;

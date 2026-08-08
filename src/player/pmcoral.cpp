@@ -229,9 +229,9 @@ void	CPlayerModeCoralBlower::think()
 				{
 				CRECT	area=suckRect;
 				DVECTOR const &ofs=CLevel::getCameraPos();
-				area.x1.sh-=ofs.vx;
+				area.x1-=ofs.vx;
 				area.y1-=ofs.vy;
-				area.x2.sh-=ofs.vx;
+				area.x2-=ofs.vx;
 				area.y2-=ofs.vy;
 				DrawLine(area.x1,area.y1,area.x2,area.y1,255,255,255,0);
 				DrawLine(area.x2,area.y1,area.x2,area.y2,255,255,255,0);

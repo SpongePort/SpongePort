@@ -21,7 +21,7 @@ static u32			s_lastFrameCounter=0,s_vblsThisFrame=0;
 static sVidScreen 	Screen[2];
 static int			ScreenXOfs=0,ScreenYOfs=0;
 static int			ScreenW, ScreenH;
-static RECT16 		ScreenRect;
+static RECT 		ScreenRect;
 /*static*/ int		FrameFlipFlag=0;
 static int			ClearScreen=0;
 static	u8			*ScreenImage=0;
@@ -38,7 +38,7 @@ static int	LoadBackY;
 static int	LoadHalfWidth;
 static int	LoadIconSide;
 static int	DrawLoadIcon=0;
-static RECT16	LoadBackRect;
+static RECT	LoadBackRect;
 static int	LoadTime=0;
 static const int	LoadBackInc=8;
 static	DISPENV		*VblDispEnv=0;	// Disp End used as Vbl flip flag, so MUST be set after DrawEnv
@@ -216,7 +216,7 @@ void		ClearScreenImage()			{ScreenImage=0;}
 void	ClearVRam()
 {
 #if	defined(__VERSION_DEBUG__) && !defined(__USER_CDBUILD__)
-RECT16 	Rect;
+RECT 	Rect;
 //Clear All Videoram
 	setRECT(&Rect,INGAME_SCREENW,0,1024-INGAME_SCREENW,512);
 	ClearImage(&Rect,0,0,0);
@@ -288,7 +288,7 @@ void VidSetRes(int x, int y)
 
 	if ((VidGetScrW() != x) || (VidGetScrH() != y))
 		{
-		RECT16	clrRect;
+		RECT	clrRect;
 
 		ScreenW=x;
 		ScreenH=y;

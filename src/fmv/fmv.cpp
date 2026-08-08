@@ -102,9 +102,9 @@ typedef struct
 	u_long		*vlcbuf[2];
 	int			vlcid;
 	u_short		*imgbuf;
-	RECT16		rect[2];
+	RECT		rect[2];
 	int			rectid;
-	RECT16		slice;
+	RECT		slice;
 	int			isdone;
 	} DECENV;
 
@@ -169,7 +169,7 @@ int				YOfs;
 int				frame = 0;
 int				id;
 int				Pad=0;
-RECT16			ClearRect={0,0,512,512};	
+RECT			ClearRect={0,0,512,512};	
 #ifdef	FORCE_FMV
 static	int	HasInit=0;
 		if (!HasInit)
@@ -418,7 +418,7 @@ static int strNextVlc(DECENV *dec)
 static u_long *strNext(DECENV *dec)
 {
 #ifdef ENABLE_FMV
-	RECT16		rect;
+	RECT		rect;
 	u_long		*addr;
 	StHEADER	*sector;
 	int			cnt = WAIT_TIME/8;

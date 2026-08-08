@@ -18,6 +18,7 @@ file(GLOB_RECURSE SRCS
 )
 add_executable(${PROJECT_NAME} ${SRCS})
 target_include_directories(${PROJECT_NAME} PRIVATE include PRIVATE src)
+target_compile_options(${PROJECT_NAME} PRIVATE -w -g -fpermissive)
 
 # PsyZ
 add_subdirectory(psyz/psyz build)

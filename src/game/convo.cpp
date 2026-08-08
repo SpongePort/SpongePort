@@ -484,7 +484,7 @@ int CConversation::isActive()
 void CConversation::setCharacterAndText(int _characterId,int _textId)
 {
 	char	buf[1024],*pBuf;
-	RECT16	clipTextRegion;
+	RECT	clipTextRegion;
 	int		i;
 
 	s_faceFrame=(s_characterIconFrames[_characterId].m_frame);
@@ -640,7 +640,7 @@ void CConversation::thinkQuestion()
   ---------------------------------------------------------------------- */
 void CConversation::renderText()
 {
-	RECT16	clipTextRegion;
+	RECT	clipTextRegion;
 	char	buf[1024],*pBuf;
 	int		i;
 
@@ -984,9 +984,9 @@ void CConversation::registerConversationLevelScripts(int level)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-RECT16 CConversation::getTextRegion()
+RECT CConversation::getTextRegion()
 {
-	RECT16 clipRegion={TEXTBOX_X,TEXTBOX_Y-3,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
+	RECT clipRegion={TEXTBOX_X,TEXTBOX_Y-3,TEXTBOX_WIDTH,TEXTBOX_HEIGHT};
 
 	if(s_faceFrame==-1)
 	{

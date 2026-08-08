@@ -67,9 +67,9 @@ void	CLevelExitTrigger::render()
 
 	ofs=CLevel::getCameraPos();
 	area=getCollisionArea();
-	area.x1.sh-=ofs.vx;
+	area.x1-=ofs.vx;
 	area.y1-=ofs.vy;
-	area.x2.sh-=ofs.vx;
+	area.x2-=ofs.vx;
 	area.y2-=ofs.vy;
 
 	if(area.x1<=511&&area.x2>=0&&

@@ -96,17 +96,17 @@ int			XInc=LegXInc;
 
 				if (!XFlip)
 				{
-					Ft4->x0.sh+=WOfs/2;
-					Ft4->x2.sh+=WOfs/2;
-					Ft4->x1.sh-=WOfs/2;
-					Ft4->x3.sh-=WOfs/2;
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
 				}
 				else
 				{
-					Ft4->x0.sh+=WOfs/2;
-					Ft4->x2.sh+=WOfs/2;
-					Ft4->x1.sh-=WOfs/2;
-					Ft4->x3.sh-=WOfs/2;
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
 				}
 
 		
@@ -151,17 +151,17 @@ int			XInc=LegXInc;
 
 				if (!XFlip)
 				{
-					Ft4->x0.sh+=WOfs/2;
-					Ft4->x2.sh+=WOfs/2;
-					Ft4->x1.sh-=WOfs/2;
-					Ft4->x3.sh-=WOfs/2;
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
 				}
 				else
 				{
-					Ft4->x0.sh+=WOfs/2;
-					Ft4->x2.sh+=WOfs/2;
-					Ft4->x1.sh-=WOfs/2;
-					Ft4->x3.sh-=WOfs/2;
+					Ft4->x0+=WOfs/2;
+					Ft4->x2+=WOfs/2;
+					Ft4->x1-=WOfs/2;
+					Ft4->x3-=WOfs/2;
 				}
 
 		

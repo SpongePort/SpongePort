@@ -36,8 +36,6 @@ extern "C"
 #define gte_ldsxy2( r0 ) {	MTC2(*(uint*)(r0), 14); }
 
 /*****************************************************************************/
-#include	"system/types.h"
-
 #include 	"mem/memory.h"
 #include 	"system/gte.h"
 #include	"utils/cmxmacro.h"

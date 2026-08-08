@@ -296,7 +296,7 @@ void	CActorCache::Reset()
 		SlotCount=0;
 
 // Clear VRam
-RECT16	R={CACHE_X,CACHE_Y,TPAGE_W*CACHE_W,TPAGE_H*CACHE_H};
+RECT	R={CACHE_X,CACHE_Y,TPAGE_W*CACHE_W,TPAGE_H*CACHE_H};
 		ClearImage(&R,0,255,0);
 }
 
@@ -305,7 +305,7 @@ void	CActorCache::LoadPalette(sActorPool *Actor)
 {
 		if (!Actor->ActorGfx->Clut)
 		{
-			RECT16	R;
+			RECT	R;
 			int	PalNo;
 
 			if (Actor->Filename==ACTORS_SPONGEBOB_SBK)
@@ -658,10 +658,10 @@ int		AspectX0,AspectX1;
 
 #if		INGAME_SCREENW==512
 // Correct Aspect
-		Ft4->x0.sh-=AspectX0;
-		Ft4->x1.sh+=AspectX1;
-		Ft4->x2.sh-=AspectX0;
-		Ft4->x3.sh+=AspectX1;
+		Ft4->x0-=AspectX0;
+		Ft4->x1+=AspectX1;
+		Ft4->x2-=AspectX0;
+		Ft4->x3+=AspectX1;
 #endif
 }
 
@@ -752,10 +752,10 @@ int		YMin,YMax;
 		BBox.YMin=YMin+BBOX_ADJ;
 		BBox.YMax=YMax-BBOX_ADJ;
 
-		Ft4->x0.sh+=Pos.vx; Ft4->y0.sh+=Pos.vy;
-		Ft4->x1.sh+=Pos.vx; Ft4->y1.sh+=Pos.vy;
-		Ft4->x2.sh+=Pos.vx; Ft4->y2.sh+=Pos.vy;
-		Ft4->x3.sh+=Pos.vx; Ft4->y3.sh+=Pos.vy;
+		Ft4->x0+=Pos.vx; Ft4->y0+=Pos.vy;
+		Ft4->x1+=Pos.vx; Ft4->y1+=Pos.vy;
+		Ft4->x2+=Pos.vx; Ft4->y2+=Pos.vy;
+		Ft4->x3+=Pos.vx; Ft4->y3+=Pos.vy;
 
 		return(Ft4);
 }

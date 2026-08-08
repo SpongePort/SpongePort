@@ -17,7 +17,7 @@
 struct	sPoolNode
 {
 		sSpriteFrameGfx	*Frame;
-		RECT16			DstRect;
+		RECT			DstRect;
 		u16				TPage;
 		u8				U,V;
 		sPoolNode		*Prev,*Next;

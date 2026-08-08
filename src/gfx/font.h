@@ -96,7 +96,7 @@ protected:
 	u8				m_r, m_g, m_b;						// Font colour
 	Justification	m_justification;
 	u16				m_ot;								// Depth
-	RECT16			m_printArea;
+	RECT			m_printArea;
 	SpriteBank		m_spriteBank;
 	int				m_initialised;
 

@@ -40,7 +40,7 @@ int		Error=0;
 			CdIntToPos(BigLump->Sector+FileStart,&CdPos);
 	    	CdControlB(CdlSetloc, (u8*)&CdPos, 0);	// Set CD Pos
 	    	CdControlB(CdlSetmode, &Com, 0);
-			Error=CdRead(Count, (u32*)Dst, CdlModeSpeed);
+			Error=CdRead(Count, (u_long*)Dst, CdlModeSpeed);
 	        }
 		while (CdReadSync(1,0) > 0);
 		BigLump->Sector+=Count;

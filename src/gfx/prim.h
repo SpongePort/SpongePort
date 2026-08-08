@@ -325,7 +325,7 @@ void 			PrimInit();
 
 void 			PrimDisplay();
 
-void 			PrimClip(RECT16 *r, u32 Depth);
+void 			PrimClip(RECT *r, u32 Depth);
 void 			PrimFullScreen(int Depth);
 inline	u8		*GetPrimPtr()			{return(CurrPrim);}
 inline	void	SetPrimPtr(u8 *Ptr)		{CurrPrim=Ptr;}
@@ -378,10 +378,10 @@ int		W=P->x1-P->x0;
 int		aW=(W*aspectX)>>12;
 int		dW=(W-aW)>>1;
 
-		P->x0.sh+=dW;
-		P->x1.sh-=dW;
-		P->x2.sh+=dW;
-		P->x3.sh-=dW;
+		P->x0+=dW;
+		P->x1-=dW;
+		P->x2+=dW;
+		P->x3-=dW;
 }
 inline	void	CorrectAspect(POLY_GT4 *P)
 {
@@ -389,10 +389,10 @@ int		W=P->x1-P->x0;
 int		aW=(W*aspectX)>>12;
 int		dW=(W-aW)>>1;
 
-		P->x0.sh+=dW;
-		P->x1.sh-=dW;
-		P->x2.sh+=dW;
-		P->x3.sh-=dW;
+		P->x0+=dW;
+		P->x1-=dW;
+		P->x2+=dW;
+		P->x3-=dW;
 }
 
 #endif

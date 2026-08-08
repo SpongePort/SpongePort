@@ -110,12 +110,12 @@ int			W;
 		setRGB0(Ft4,RGB.R,RGB.G,RGB.B);
 		setSemiTrans(Ft4,Flags & FX_FLAG_TRANS);
 		W=(Ft4->x1-Ft4->x0)/2;
-		Ft4->x0.sh-=W;	Ft4->x1.sh+=W;
-		Ft4->x2.sh-=W;	Ft4->x3.sh+=W;
+		Ft4->x0-=W;	Ft4->x1+=W;
+		Ft4->x2-=W;	Ft4->x3+=W;
 		if (Height<8)
 		{
-			Ft4->x0.sh+=2;	Ft4->x1.sh-=2;
-			Ft4->x2.sh+=2;	Ft4->x3.sh-=2;
+			Ft4->x0+=2;	Ft4->x1-=2;
+			Ft4->x2+=2;	Ft4->x3-=2;
 		}
 		
 
@@ -132,8 +132,8 @@ int			W;
 		setRGB0(Ft4,RGB.R,RGB.G,RGB.B);
 		setSemiTrans(Ft4,Flags & FX_FLAG_TRANS);
 		W=(Ft4->x1-Ft4->x0)/2;
-		Ft4->x0.sh-=W+2;	Ft4->x1.sh+=W+2;
-		Ft4->x2.sh-=W-2;	Ft4->x3.sh+=W-2;
+		Ft4->x0-=W+2;	Ft4->x1+=W+2;
+		Ft4->x2-=W-2;	Ft4->x3+=W-2;
 		Ft4->y0=Ft4->y2-Height;
 		Ft4->y1=Ft4->y3-Height;
 		Ft4->v0++; Ft4->v1++;
