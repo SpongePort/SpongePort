@@ -392,8 +392,8 @@ void MemInit()
 {
 	u16			stack = LListLen - 1;
 	sLList *	mem = &MainRam;
-	char *		addr = (char*)OPT_LinkerOpts.FreeMemAddress;
-	u32			len = OPT_LinkerOpts.FreeMemSize - 4;
+	char *		addr = (char*)malloc(1);
+	u32			len = UINT_MAX;
 
 	mem->SP = stack;
 	mem->Head = 0xffff;
@@ -492,7 +492,6 @@ int		BestNode,FirstNode;
 }
 
 /*****************************************************************************/
-#ifndef USE_CPP_MEM
 void  	MemFree( void * Address )
 {
 u32 	Len;
@@ -568,7 +567,6 @@ char	*Addr = (char*)Address;
 		freeDebugMem( Address );
 #endif
 }
-#endif
 /*
 void  	MemFree( void * Address )
 {

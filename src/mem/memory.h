@@ -7,17 +7,17 @@
 
 
 #ifndef _GLOBAL_HEADER_
-#include "system/global.h"
-#endif
-
-#ifdef TARGET_PC
-#define USE_CPP_MEM
+#include "system\global.h"
 #endif
 
 
 /*****************************************************************************/
 // Define if you want to debug memory
-#define	__DEBUG_MEM__
+#ifdef __USER_paul__
+	#ifdef	__VERSION_DEBUG__
+	#define	__DEBUG_MEM__
+	#endif
+#endif
 
 /*****************************************************************************/
 #define LListLen		(256)
@@ -57,26 +57,15 @@ void *	operator new[](size_t Size, const char * name = NULL);
 void	operator delete(void *Ptr);
 void	operator delete[](void *Ptr);
 
+
 #ifdef __DEBUG_MEM__
 	void	dumpDebugMem();
 	void	DebugMemFontInit();
-#else
-	#define	dumpDebugMem	;
-	#define	DebugMemFontInit	;
-#endif
-
-#ifdef USE_CPP_MEM
-
-#define MemAlloc(Size, Name) malloc(Size);
-#define MemFree(Addr) free(Addr);
-
-#else
-
-#ifdef __DEBUG_MEM__
 	#define MemAlloc( Size, Name )	MemAllocate( (Size), (Name), __FILE__, __LINE__ )
 #else
 	#define MemAlloc(Size,Name)	MemAllocate( (Size), NULL, NULL, 0 )
-#endif
+	#define	dumpDebugMem	;
+	#define	DebugMemFontInit	;
 
 #endif
 
