@@ -210,11 +210,11 @@ void dumpDebugMem()
 			if (mem->addr)
 			{
 				u32			len;
-				u32 *		addr;
+				u_long *		addr;
 				POLY_F4 *	F4;
 				const CVECTOR *	col;
 
-				addr = (u32 *)mem->addr;
+				addr = (u_long *)mem->addr;
 
 				x = (((u32)addr) - ((u32)memBase));
 				x *= s_dumpScale;
@@ -278,9 +278,9 @@ void dumpDebugMem()
 		mem = &memDump[ s_currentMemPart ];
 		if (mem->addr)
 #ifdef	USE_MEM_GUARDS
-			len = *(((u32 *)mem->addr) - (NUM_MEM_GUARDS+1));
+			len = *(((u_long *)mem->addr) - (NUM_MEM_GUARDS+1));
 #else
-			len = *(((u32 *)mem->addr) - 1);
+			len = *(((u_long *)mem->addr) - 1);
 #endif
 		else
 			len = 0;
@@ -458,25 +458,25 @@ int		BestNode,FirstNode;
 	 	if (mem->Nodes[BestNode].Len == 0) MemRemoveNode( mem, BestNode);
 
 
-		*(u32*)Addr = Len;
+		*(u_long*)Addr = Len;
 		Addr += 4;
 
 #ifdef	USE_MEM_GUARDS
 		unsigned int	i;
 		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(int))
 		{
-			*(int*)(Addr+i)=HEAD_GUARD_FILL_PATTERN;
+			*(u_long*)(Addr+i)=HEAD_GUARD_FILL_PATTERN;
 		}
 		Addr+=MEM_GUARD_SIZE;
 
 		for(i=0;i<((TLen+3)&0xfffffffc);i+=sizeof(int))
 		{
-			*(int*)(Addr+i)=MEM_FILL_PATTERN;
+			*(u_long*)(Addr+i)=MEM_FILL_PATTERN;
 		}
 
 		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(int))
 		{
-			*(int*)(Addr+((TLen+3)&0xfffffffc)+i)=TAIL_GUARD_FILL_PATTERN;
+			*(u_long*)(Addr+((TLen+3)&0xfffffffc)+i)=TAIL_GUARD_FILL_PATTERN;
 		}
 #endif	/* USE_MEM_GUARDS */
 
@@ -506,13 +506,13 @@ char	*Addr = (char*)Address;
 		Addr-=MEM_GUARD_SIZE;
 #endif	/* USE_MEM_GUARDS */
 		Addr -= 4;
-		Len = *(u32*)Addr;
+		Len = *(u_long*)Addr;
 		
 #ifdef	USE_MEM_GUARDS
 		// Check that the guards are intact
 		unsigned int	i;
-		unsigned int	*guardAddr;
-		guardAddr=(unsigned int*)(Addr+4);
+		u_long	*guardAddr;
+		guardAddr=(u_long*)(Addr+4);
 		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(unsigned int),guardAddr++)
 		{
 			if(*guardAddr!=HEAD_GUARD_FILL_PATTERN)
@@ -521,7 +521,7 @@ char	*Addr = (char*)Address;
 				break;
 			}
 		}
-		guardAddr=(unsigned int*)(Addr+Len-MEM_GUARD_SIZE);
+		guardAddr=(u_long*)(Addr+Len-MEM_GUARD_SIZE);
 		for(i=0;i<MEM_GUARD_SIZE;i+=sizeof(unsigned int),guardAddr++)
 		{
 			if(*guardAddr!=TAIL_GUARD_FILL_PATTERN)
@@ -578,7 +578,7 @@ void  	MemFree( void * Address )
 
 	Addr -= 4;
 
-	Len = *(u32*)Addr;
+	Len = *(u_long*)Addr;
 
 	mem->RamUsed -= Len;
 

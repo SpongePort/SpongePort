@@ -101,7 +101,7 @@ static void displayKeys();
 
 static void	cls();
 static void print(char *_string);
-static void printAdr(int *_adr);
+static void printAdr(u_long *_adr);
 
 
 
@@ -153,8 +153,8 @@ static RegDef	s_regDefs[]=
 static int	s_numRegs=sizeof(s_regDefs)/sizeof(RegDef);
 
 // Pointers for displayDump();
-static int *s_viewSp;
-static int *s_viewPc;
+static u_long *s_viewSp;
+static u_long *s_viewPc;
 
 // Various externs for displayValues()
 extern sLList		MainRam;
@@ -187,8 +187,8 @@ void exc_c(void)
 	static int	s_padDelay=50;
 
 	PadInit(0);
-	s_viewSp=(int *)reg_lst[OFS_SP];
-	s_viewPc=(int *)reg_lst[OFS_EPC];
+	s_viewSp=(u_long *)reg_lst[OFS_SP];
+	s_viewPc=(u_long *)reg_lst[OFS_EPC];
 
 	while(1)
 	{
@@ -214,8 +214,8 @@ void exc_c(void)
 				if(pad&PADR2)	s_viewPc+=8;
 				if(pad&PADstart)
 				{
-					s_viewSp=(int *)reg_lst[OFS_SP];
-					s_viewPc=(int *)reg_lst[OFS_EPC];
+					s_viewSp=(u_long *)reg_lst[OFS_SP];
+					s_viewPc=(u_long *)reg_lst[OFS_EPC];
 				}
 			}
 		}
@@ -294,7 +294,7 @@ static void print(char *_string)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-static void printAdr(int *_adr)
+static void printAdr(u_long *_adr)
 {
 	int		chk,dummy_mem,error;
 	char	textBuf[64];
@@ -307,7 +307,7 @@ static void printAdr(int *_adr)
 		error=0;
 	if(chk>0x1f800000&&chk<0x1f800400)
 		error=0;
-	_adr=(int *)(chk|dummy_mem);
+	_adr=(u_long *)(chk|dummy_mem);
 	if(error==0)
 		sprintf(textBuf,"%08x=%08x",(int)(_adr),*_adr);
 	else
@@ -360,11 +360,11 @@ static void displayTitle()
 static void displayCause()
 {
 	char		textBuf[100];
-	int			*exc;
+	u_long			*exc;
 
 	excFont->setColour(255,0,0);
 
-	exc=(int*)reg_lst[OFS_EPC];
+	exc=(u_long*)reg_lst[OFS_EPC];
 	sprintf(textBuf,"%s",s_exceptionText[reg_lst[OFS_CA]>>2&0x1f]);
 	print(textBuf);
 
@@ -422,7 +422,7 @@ static void displayRegs()
 static void displayDump()
 {
 	char	textBuf[100];
-	int		*sp,*pc;
+	u_long		*sp,*pc;
 
 	excFont->setColour(255,255,255);
 
@@ -432,7 +432,7 @@ static void displayDump()
 	for(int i=0;i<10;i++)
 	{
 		// SP
-		if(sp==(int*)reg_lst[OFS_SP])
+		if(sp==(u_long*)reg_lst[OFS_SP])
 		{
 			print(">");
 		}
@@ -445,7 +445,7 @@ static void displayDump()
 		sp+=8;
 
 		// PC
-		if(pc==(int*)reg_lst[OFS_EPC])
+		if(pc==(u_long*)reg_lst[OFS_EPC])
 		{
 			print(">");
 		}

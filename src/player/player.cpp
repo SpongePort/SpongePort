@@ -1683,7 +1683,7 @@ int CPlayer::getHeightFromPlatformNoGround(int _x,int _y,int _maxHeight)
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight)
+int CPlayer::getHeightFromGroundNoPlatform(int _x,int _y,int _maxHeight=32)
 {
 	return( CGameScene::getCollision()->getHeightFromGround(_x,_y,_maxHeight) );
 }
@@ -1729,7 +1729,7 @@ void CPlayer::addLife()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-void CPlayer::addSpatula(int Count)
+void CPlayer::addSpatula(int Count=1)
 {
 	m_numSpatulasHeld+=Count;
 

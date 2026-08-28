@@ -415,7 +415,7 @@ void CSoundMediator::think(int _frames)
 {
 	int			i;
 	int			diff,speed;
-	int			*current,*target,*dirty;
+	u_long*current,*target,*dirty;
 
 	ASSERT(s_initialised);
 
@@ -635,7 +635,7 @@ void CSoundMediator::setSfxBank(SFXBANKID _bankId)
 				same time as *lots* of other sfx.
 	Returns:
   ---------------------------------------------------------------------- */
-xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock,int _dontPlayIfSFXAlreadyAudible)
+xmPlayingId CSoundMediator::playSfx(SFXID _sfxId,int _lock=false,int _dontPlayIfSFXAlreadyAudible=false)
 {
 	if(!s_canPlaySfx)
 	{

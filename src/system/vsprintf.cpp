@@ -240,7 +240,7 @@ extern int __vsprintf(char *buf, const char *fmt, __va_list args)
 				long * ip = __va_arg(args, long *);
 				*ip = (str - buf);
 			} else {
-				int * ip = __va_arg(args, int *);
+				u_long* ip = __va_arg(args, u_long*);
 				*ip = (str - buf);
 			}
 			continue;

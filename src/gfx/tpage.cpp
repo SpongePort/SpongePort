@@ -158,7 +158,7 @@ sTPageInfo	*Cache=&s_TPCache[TPage].Info[Half];
 }
 
 /*****************************************************************************/
-void	TPLoadVRam(sTPageHdr *TPHdr, int TPage, int Half, u32 *VRamData)
+void	TPLoadVRam(sTPageHdr *TPHdr, int TPage, int Half, u_long *VRamData)
 {
 RECT		Rect;
 
@@ -187,7 +187,7 @@ TPAGE_DESC	TPLoadTex(FileEquate Filename)
 TPAGE_DESC		Desc;
 sTPageHdr		*TPHdr;
 sFrameHdr		*FramePtr;
-u32				*VRAMData;
+u_long				*VRAMData;
 int				TPage,Half;
 sTPageInfo		*Cache;
 
@@ -206,7 +206,7 @@ sTPageInfo		*Cache;
 			TPHdr=(sTPageHdr*)CFileIO::loadFile(Filename,"TPLoadTEX");
 			ASSERT(!TPHdr->NumOfSpareBoxes);
 			FramePtr=(sFrameHdr*)	MakePtr(TPHdr,sizeof(sTPageHdr));
-			VRAMData=(u32*)			MakePtr(FramePtr,TPHdr->NoOfFrames*sizeof(sFrameHdr));
+			VRAMData=(u_long*)			MakePtr(FramePtr,TPHdr->NoOfFrames*sizeof(sFrameHdr));
 			Cache=FindSpareTPage(Filename,TPage,Half,TPHdr);
 			for (int Frm=0;Frm<TPHdr->NoOfFrames; Frm++)	// Add Animated Texture references
 				{
@@ -240,7 +240,7 @@ TPAGE_DESC TPLoadTexWithHeaders(FileEquate Filename, sFrameHdr **hdrs )
 TPAGE_DESC	Desc;
 sTPageHdr	TPHdr;
 sFrameHdr	*FramePtr;
-u32			*VRAMData;
+u_long			*VRAMData;
 int			TPage,Half=0;
 sTPageInfo	*Cache;
 int			ReadLeft;
@@ -279,7 +279,7 @@ int			ReadLeft;
 		FramePtr=(sFrameHdr*)MemAlloc(ReadLeft,"TPLoadTemp");
 		CFileIO::ReadFile(FramePtr,ReadLeft);
 		CFileIO::CloseFile();
-		VRAMData=(u32*)	MakePtr(FramePtr,TPHdr.NoOfFrames*sizeof(sFrameHdr));
+		VRAMData=(u_long*)	MakePtr(FramePtr,TPHdr.NoOfFrames*sizeof(sFrameHdr));
 		MCmemcpy(*hdrs,FramePtr,TPHdr.NoOfFrames*sizeof(sFrameHdr));	
 		TPLoadVRam(&TPHdr, TPage,Half,VRAMData);
 		Cache=&s_TPCache[TPage].Info[Half];

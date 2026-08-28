@@ -5,14 +5,16 @@
 #ifndef	__UTILS_HEADER__
 #define	__UTILS_HEADER__
 
+//#include <psyz.h>
 #include	"utils/mathmip.h"
-#include <abs.h>
 
 #include "dstructs.h"
 
 #ifndef __MATHTABLE_HEADER__
 #include "utils/mathtab.h"
 #endif
+
+#define ONE 1
 
 /*****************************************************************************/
 #define	CIRCLE_TAB_MAX	64
@@ -69,10 +71,6 @@ const s32 scale = ONE+2050+128;
 //	dont need, as zero'd 
 //	dst_mtx->t[ 0 ] = (dst_mtx->t[ 0 ] * scale) >> 12;
 }
-
-#ifndef TransposeMatrix
-extern MATRIX *TransposeMatrix(MATRIX *m0,MATRIX *m1);
-#endif
 
 /*****************************************************************************/
 inline	void InverseMatrix(MATRIX *m, MATRIX &im)	//assumes no scale, just transformation and rotation
@@ -336,11 +334,11 @@ inline VECTOR operator ^ (const sShortXYZ& a, const sShortXYZ& b)	// CROSS PRODU
 /*****************************************************************************/
 inline u32 	isqrt2(u32 v)
 {
-u32 root = 0;
-u32 remhi = 0;
-u32 remlo = v;
-u32 count = 15;
-u32 testdiv;
+register u32 root = 0;
+register u32 remhi = 0;
+register u32 remlo = v;
+register u32 count = 15;
+register u32 testdiv;
 
 	do
 		{
@@ -357,144 +355,160 @@ u32 testdiv;
 	return(root);
 }
 
-// TODO: reimplement vector math
-
+// NOTE: most of these vector maths are not actually used except for CalcLength
 
 /*****************************************************************************/
 inline u32		CalcLength(const SVECTOR *s)
 {
-int		Dt = 0;
-//		gte_ldsv(s);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+	// TODO: CalcLength
+	/*
+int		Dt;
+		gte_ldsv(s);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(Dt);
+		*/
+	return 0;
 }
 
 /*****************************************************************************/
+/*
 inline u32		CalcLengthSquared(const SVECTOR *s)
 {
-u32		Dt = 0;
-//		gte_ldsv(s);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+u32		Dt;
+		gte_ldsv(s);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(Dt);
 }
 
 /*****************************************************************************/
+/*
 inline u32		CalcLengthV(const VECTOR *s)
 {
-u32		Dt = 0;
-//		gte_ldlvl(s);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+u32		Dt;
+		gte_ldlvl(s);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcLengthSquaredV(const VECTOR *s)
 {
-u32		Dt = 0;
-//		gte_ldlvl(s);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+u32		Dt;
+		gte_ldlvl(s);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(Dt);
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDist(const SVECTOR *s, const SVECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dy = s->vy - e->vy;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXYZ(Dx,Dy,Dz);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+		CMX_ldXYZ(Dx,Dy,Dz);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
+	return 0;
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistXZ(const SVECTOR *s, const SVECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt));
+	return 0;
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistV(const VECTOR *s, const VECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dy = s->vy - e->vy;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXYZ(Dx,Dy,Dz);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+		CMX_ldXYZ(Dx,Dy,Dz);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
+	return 0;
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistV(const VECTOR *s, const VECTOR *e, u16 shift)
 {
 s32		Dx = (s->vx - e->vx) >> shift;
 s32		Dz = (s->vz - e->vz) >> shift;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt) << shift);
+	return 0;
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistXZV(const VECTOR *s, const VECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
+u32		Dt;
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt));
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistXZVSquared(const VECTOR *s, const VECTOR *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
-		// TODO: ABS
-		//return abs(Dt);
-		return Dt;
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
+		return abs(Dt);
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistXZV(const VECTOR *s, const VECTOR *e, u16 shift)
 {
 s32		Dx = (s->vx - e->vx) >> shift;
 s32		Dz = (s->vz - e->vz) >> shift;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt) << shift);
 }
-
+*/
 /*****************************************************************************/
+/*
 inline	long	CalcDistXZVAccurate(const VECTOR *s, const VECTOR *e)
 {
 long	Dx = s->vx - e->vx;
@@ -503,47 +517,52 @@ long	Dt = (Dx*Dx) + (Dz*Dz);
 long	len = SquareRoot0(Dt);
 		return(len);
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDist(const sShortXYZ *s, const sShortXYZ *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dy = s->vy - e->vy;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXYZ(Dx,Dy,Dz);
-//		gte_sqr0();
-//		CMX_StVecXYZMag(&Dt);
+		CMX_ldXYZ(Dx,Dy,Dz);
+		gte_sqr0();
+		CMX_StVecXYZMag(&Dt);
 		return(isqrt2(Dt));
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistXZ(const sShortXYZ *s, const sShortXYZ *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
 		return(isqrt2(Dt));
 }
-
+*/
 /*****************************************************************************/
+/*
 inline u32		CalcDistXZSquared(const sShortXYZ *s, const sShortXYZ *e)
 {
 s32		Dx = s->vx - e->vx;
 s32		Dz = s->vz - e->vz;
-u32		Dt = 0;
+u32		Dt;
 
-//		CMX_ldXZ(Dx,Dz);
-//		gte_sqr0();
-//		CMX_StVecXZMag(&Dt);
+		CMX_ldXZ(Dx,Dz);
+		gte_sqr0();
+		CMX_StVecXZMag(&Dt);
 		return(Dt);
 }
+*/
 /*****************************************************************************/
+/*
 inline	s32		DotProduct(const SVECTOR *V0, const SVECTOR *V1)
 {		
 s32		Dpx,Dpy,Dpz;
@@ -552,8 +571,9 @@ s32		Dpx,Dpy,Dpz;
 		Dpz=V0->vz*V1->vz;
 		return(Dpx+Dpy+Dpz);
 }
-
+*/
 /*****************************************************************************/
+/*
 inline	s32 DotProductV( const VECTOR *V0, const VECTOR *V1 )
 {		
 s32		ax, ay, az;
@@ -574,7 +594,9 @@ s32		Dpx, Dpy, Dpz;
 
 		return (Dpx + Dpy + Dpz);
 }
+*/
 /*****************************************************************************/
+/*
 inline	s32 DotProductSV( const SVECTOR *V0, const VECTOR *V1 )
 {
 s32		ax, ay, az;
@@ -595,6 +617,7 @@ s32		Dpx, Dpy, Dpz;
 
 		return (Dpx + Dpy + Dpz);
 }
+*/
 /*****************************************************************************/
 /*
 inline void	QuatSlerp(sQuat *s, sQuat *d, int t, sQuat *o)

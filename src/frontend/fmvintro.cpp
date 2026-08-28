@@ -18,11 +18,7 @@
 
 #include "frontend/fmvintro.h"
 
-#ifndef __FMV_HEADER__
-#include "fmv/fmv.h"
-#endif
-
-#ifndef __VID_HEADER_
+#ifndef __VID_HEADER__
 #include "system/vid.h"
 #endif
 
@@ -65,6 +61,7 @@
   ---------------------------------------------------------------------- */
 static bool fmvPerFrameFunc()
 {
+	/*
 	PadUpdate();
 	if(PadGetDown(0)&(PAD_START|PAD_CROSS))
 	{
@@ -72,6 +69,8 @@ static bool fmvPerFrameFunc()
 		return true;
 	}
 	return false;
+	*/
+	return true;
 }
 
 /*----------------------------------------------------------------------
@@ -83,7 +82,7 @@ static bool fmvPerFrameFunc()
 void CFrontEndFMVIntro::select()
 {
 	StopLoad();
-	FMV_play(FMV_INTRO,&fmvPerFrameFunc);
+	//FMV_play(FMV_INTRO,&fmvPerFrameFunc);
 }
 
 /*----------------------------------------------------------------------

@@ -350,30 +350,7 @@ extern "C"
 {
 
 int SDL_main(int argc, char *argv[])
-{
-	FILE* file;
-	file = fopen("baserom.bin", "r");
-	if (file)
-		fclose(file);
-	else
-	{
-#ifdef WIN32
-		MessageBox(
-			GetActiveWindow(),
-			"Couldn't find the CD image! Please place baserom.bin in the game's directory",
-			"Error",
-			MB_ICONERROR | MB_OK
-		);
-#endif
-		return 1;
-	}
-
-#ifdef __FILE_SYSTEM_CD__
-	PsyX_CDFS_Init("baserom.bin", 0, 0);
-#endif
-	
-	PsyX_Initialise("SpongeBob SquarePants", 640, 480, 0);
-        
+{        
 	InitSys();
 	//CalcFilePos(FilePositions);
 	CFileIO::GetAllFilePos();
@@ -401,10 +378,7 @@ int SDL_main(int argc, char *argv[])
 //	CXAStream::Init();			// PKG - Stuck here so that it doesn't affect any startup stuff (7/8/00)
 	MainLoop();
 
-	PsyX_Shutdown();
-
 	return(0);
-
 }
 
 }
@@ -485,7 +459,7 @@ u8		OutBuffer[1024*3];
 		for (y=0; y<H; y++)
 			{
 			SR.y--;
-			StoreImage(&SR,(u32*)InBuffer);
+			StoreImage(&SR,(u_long*)InBuffer);
 
 			for (x=0; x<W; x++)
 				{

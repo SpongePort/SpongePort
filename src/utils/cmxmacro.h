@@ -8,7 +8,6 @@
 
 /*****************************************************************************/
 // Get the summed magnitude of the vector XYZ (after sqr)
-#ifdef TARGET_PSX
 #define CMX_StVecXYZMag(r0) __asm__ volatile (		\
 		"mfc2	$12, $25;"							\
 		"mfc2	$13, $26;"							\
@@ -19,13 +18,9 @@
 		:											\
 		: "r"( r0 )									\
 			: "$12", "$13", "$14", "memory" )
-#else
-#define CMX_StVecXYZMag(r0) printf("CMX_StVecXYZMag unimplemented");
-#endif
 
 /*---------------------------------------------------------------------------*/
 // Get the summed magnitude of the vector XZ (after sqr)
-#ifdef TARGET_PSX
 #define CMX_StVecXZMag(r0) __asm__ volatile (		\
 		"mfc2	$12, $25;"							\
 		"mfc2	$13, $27;"							\
@@ -34,35 +29,26 @@
 		:											\
 		: "r"( r0 )									\
 		: "$12", "$13", "memory" )
-#else
-#define CMX_StVecXZMag(r0) printf("CMX_StVecXZMag unimplemented");
-#endif
+
 /*---------------------------------------------------------------------------*/
 // Load IR0,IR1,IR2 with values (for SQR)
-#ifdef TARGET_PSX
 #define CMX_ldXYZ(r0,r1,r2) __asm__  (			\
 		"mtc2   %0,$9;"							\
 		"mtc2   %1,$10;"						\
 		"mtc2   %2,$11"							\
 		:										\
 		: "r"( r0 ),"r"( r1 ),"r"( r2 ) )
-#else
-#define CMX_ldXYZ(r0,r1,r2)  printf("CMX_ldXYZ unimplemented");
-#endif
+
 /*---------------------------------------------------------------------------*/
 // Load IR0,IR1,IR2 with values (for SQR)
-#ifdef TARGET_PSX
 #define CMX_ldXZ(r0,r1) __asm__  (				\
 		"mtc2   %0,$9;"							\
 		"mtc2   %1,$11"							\
 		:										\
 		: "r"( r0 ),"r"( r1 ))
-#else
-#define CMX_ldXZ(r0,r1)  printf("CMX_ldXZ unimplemented");
-#endif
+
 
 /*****************************************************************************/
-#ifdef TARGET_PSX
 #define	CMX_SetTransMtxXY(r0) __asm__ (			\
 		"lw	$12, 0( %0 );"						\
 		"lw	$13, 4( %0 );"						\
@@ -71,9 +57,7 @@
 		:										\
 		: "r"( r0 )								\
 		: "$12", "$13" )
-#else
-#define CMX_SetTransMtxXY(r0) printf("CMX_SetTransMtxXY unimplemented");
-#endif
+
 /*****************************************************************************/
 /*** Smaller Translation Macros (no return flags) ****************************/
 /*****************************************************************************/

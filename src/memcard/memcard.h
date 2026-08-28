@@ -245,7 +245,7 @@ private:
 		static int				s_blockCount;
 		static char				s_tempFileInfoBuffer[128];
 								
-		static int			s_syncStatus,s_syncCmds,s_syncResults;
+		static long int			s_syncStatus,s_syncCmds,s_syncResults;
 								
 		static void				*s_bufPtr;
 								

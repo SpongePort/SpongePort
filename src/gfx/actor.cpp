@@ -325,7 +325,7 @@ void	CActorCache::LoadPalette(sActorPool *Actor)
 			R.w=CACHE_PALW;
 			R.h=CACHE_PALH;
 			while(DrawSync(1));
-			LoadImage( &R, POINTER(u32, Actor->ActorGfx, Actor->ActorGfx->Palette));
+			LoadImage( &R, POINTER(u_long, Actor->ActorGfx, Actor->ActorGfx->Palette));
 			Actor->ActorGfx->Clut=getClut(R.x,R.y);
 			CurrentPalette++;
 		}
@@ -713,7 +713,7 @@ VECTOR	Scale;
 		ScaleMatrix(&Mtx,&Scale);
 		CorrectMatrixScale(&Mtx);
 		gte_SetRotMatrix(&Mtx);
-		CMX_SetTransMtxXY(&ZeroPos);
+		gte_SetTransMatrix(&ZeroPos);
 
 		
 SVECTOR	I,O;
@@ -805,14 +805,14 @@ void	CModelGfx::SetModel(int Type)
 }
 
 /*****************************************************************************/
-static const int	ElemXMin=-(16/2);
-static const int	ElemXMax=+(16/2);
-static const int	ElemYMin=-(16/2);
-static const int	ElemYMax=+(16/2);
-static const int	ElemZMin=-(16*4);
-static const int	ElemZMax=+(16*4);
+static const u16	ElemXMin=-(16/2);
+static const u16	ElemXMax=+(16/2);
+static const u16	ElemYMin=-(16/2);
+static const u16	ElemYMax=+(16/2);
+static const u16	ElemZMin=-(16*4);
+static const u16	ElemZMax=+(16*4);
 
-static VECTOR	VtxTable[8]=
+static SVECTOR	VtxTable[8]=
 {
 	{ElemXMin,ElemYMin,ElemZMin},	// FLU
 	{ElemXMax,ElemYMin,ElemZMin},	// FRU
@@ -829,9 +829,9 @@ static VECTOR	VtxTable[8]=
 void	CModelGfx::RenderTile(DVECTOR &Pos,int TileID)
 {
 sElem3d	*ThisElem=&ElemBank[TileID];
-u32		*XYList=(u32*)SCRATCH_RAM;
-u32		*OutVtx=XYList;
-VECTOR	*V0,*V1,*V2,*InVtx=VtxTable;
+u_long		*XYList=(u_long*)SCRATCH_RAM;
+u_long		*OutVtx=XYList;
+SVECTOR	*V0,*V1,*V2,*InVtx=VtxTable;
 VECTOR	RenderPos;
 MATRIX	Mtx;
 
@@ -839,7 +839,7 @@ MATRIX	Mtx;
 		RenderPos.vx=(INGAME_SCREENOFS_X)+Pos.vx;
 		RenderPos.vy=(INGAME_SCREENOFS_Y)+Pos.vy;
 		gte_SetRotMatrix(&Mtx);
-		CMX_SetTransMtxXY(&RenderPos);
+		gte_SetTransMatrix(&RenderPos);
 
 		V0=InVtx++; 
 		V1=InVtx++; 
@@ -847,7 +847,7 @@ MATRIX	Mtx;
 		gte_ldv3(V0,V1,V2);
 		for (int i=0; i<(int)((sizeof(VtxTable)/sizeof(VECTOR))+1); i++)
 		{
-			u32	*OutPtr;
+			u_long	*OutPtr;
 			gte_rtpt(); // 22 cycles
 			V0=InVtx++;
 			V1=InVtx++;
@@ -862,15 +862,15 @@ MATRIX	Mtx;
 }
 
 /*****************************************************************************/
-void		CModelGfx::RenderElem(sElem3d *ThisElem,DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,s32 ClipFlag,u32 *TransBuffer)
+void		CModelGfx::RenderElem(sElem3d *ThisElem,DVECTOR &Pos,SVECTOR *Angle,VECTOR *Scale,s32 ClipFlag,u_long *TransBuffer)
 {
 u8				*PrimPtr=GetPrimPtr();
 u32				T0,T1,T2,T3;
 s32				ClipZ;
 sOT				*ThisOT;
-VECTOR			RenderPos;
+SVECTOR			RenderPos;
 MATRIX			Mtx;
-//u32	const		*XYList=(u32*)SCRATCH_RAM;
+//u32	const		*XYList=(u_long*)SCRATCH_RAM;
 u8 const		*XYList=(u8*)SCRATCH_RAM;
 
 
@@ -898,28 +898,29 @@ u8 const		*XYList=(u8*)SCRATCH_RAM;
 
 		RenderPos.vx=(INGAME_SCREENOFS_X)+Pos.vx;
 		RenderPos.vy=(INGAME_SCREENOFS_Y)+Pos.vy;
-		gte_SetRotMatrix(&Mtx);
-		CMX_SetTransMtxXY(&RenderPos);
+		gte_SetRotMatrix(&Mtx); 
+		gte_SetTransMatrix(&RenderPos);
+		//CMX_SetTransMtxXY(&RenderPos);
 
 // --- Cache Vtx ----------
 		{
 			int		Count=ThisElem->VtxTriCount;
-			sVtx	*V0,*V1,*V2;
+			SVECTOR	*V0,*V1,*V2;
 			u16		*IdxTable=&VtxIdxList[ThisElem->VtxIdxStart];
 
-			V0=&VtxList[*IdxTable++];
-			V1=&VtxList[*IdxTable++];
-			V2=&VtxList[*IdxTable++];
+			V0=(SVECTOR*)&VtxList[*IdxTable++];
+			V1=(SVECTOR*)&VtxList[*IdxTable++];
+			V2=(SVECTOR*)&VtxList[*IdxTable++];
 			gte_ldv3(V0,V1,V2);
 
 			while (Count--)
 			{
-				u32	*OutPtr;
-				gte_rtpt_b(); // 22 cycles
+				u_long	*OutPtr;
+				gte_rtpt(); // 22 cycles
 		// Preload next (when able) - Must check this
-				V0=&VtxList[*IdxTable++];
-				V1=&VtxList[*IdxTable++];
-				V2=&VtxList[*IdxTable++];
+				V0=(SVECTOR*)&VtxList[*IdxTable++];
+				V1=(SVECTOR*)&VtxList[*IdxTable++];
+				V2=(SVECTOR*)&VtxList[*IdxTable++];
 				OutPtr=TransBuffer;
 				TransBuffer+=3;
 				gte_ldv3(V0,V1,V2);
@@ -935,9 +936,9 @@ u8 const		*XYList=(u8*)SCRATCH_RAM;
 		{
 			POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
 
-			T0=*(u32*)(XYList+TList->P0); 
-			T1=*(u32*)(XYList+TList->P1); 
-			T2=*(u32*)(XYList+TList->P2);
+			T0=*(u_long*)(XYList+TList->P0); 
+			T1=*(u_long*)(XYList+TList->P1); 
+			T2=*(u_long*)(XYList+TList->P2);
 			gte_ldsxy0(T0);
 			gte_ldsxy1(T1);
 			gte_ldsxy2(T2);
@@ -948,12 +949,12 @@ u8 const		*XYList=(u8*)SCRATCH_RAM;
 
 			setShadeTex(ThisPrim,1);
 
-			*(u32*)&ThisPrim->x0=T0;	// Set XY0
-			*(u32*)&ThisPrim->x1=T1;	// Set XY1
-			*(u32*)&ThisPrim->x2=T2;	// Set XY2
-			T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
-			T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
-			T2=*(u32*)&TList->uv2;		// Get UV2
+			*(u_long*)&ThisPrim->x0=T0;	// Set XY0
+			*(u_long*)&ThisPrim->x1=T1;	// Set XY1
+			*(u_long*)&ThisPrim->x2=T2;	// Set XY2
+			T0=*(u_long*)&TList->uv0;		// Get UV0 & TPage
+			T1=*(u_long*)&TList->uv1;		// Get UV1 & Clut
+			T2=*(u_long*)&TList->uv2;		// Get UV2
 
 			gte_stopz(&ClipZ);
 			ThisOT=OtPtr+TList->OTOfs;
@@ -961,9 +962,9 @@ u8 const		*XYList=(u8*)SCRATCH_RAM;
 			TList++;
 			if (ClipZ<0)
 			{
-				*(u32*)&ThisPrim->u0=T0;	// Set UV0
-				*(u32*)&ThisPrim->u1=T1;	// Set UV1
-				*(u32*)&ThisPrim->u2=T2;	// Set UV2
+				*(u_long*)&ThisPrim->u0=T0;	// Set UV0
+				*(u_long*)&ThisPrim->u1=T1;	// Set UV1
+				*(u_long*)&ThisPrim->u2=T2;	// Set UV2
 				addPrim(ThisOT,ThisPrim);
 				PrimPtr+=sizeof(POLY_GT3);
 			}
@@ -976,38 +977,38 @@ u8 const		*XYList=(u8*)SCRATCH_RAM;
 		{
 			POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
-			T0=*(u32*)(XYList+QList->P0); 
-			T1=*(u32*)(XYList+QList->P1); 
-			T2=*(u32*)(XYList+QList->P2);
-			T3=*(u32*)(XYList+QList->P3);
+			T0=*(u_long*)(XYList+QList->P0); 
+			T1=*(u_long*)(XYList+QList->P1); 
+			T2=*(u_long*)(XYList+QList->P2);
+			T3=*(u_long*)(XYList+QList->P3);
 			gte_ldsxy0(T0);
 			gte_ldsxy1(T1);
 			gte_ldsxy2(T2);
 			
 			setlen(ThisPrim, GPU_PolyGT4Tag);
 			ThisPrim->code=QList->PolyCode;
-			gte_nclip_b();	// 8 cycles
+			gte_nclip();	// 8 cycles
 
 			setShadeTex(ThisPrim,1);
 
-			*(u32*)&ThisPrim->x0=T0;	// Set XY0
-			*(u32*)&ThisPrim->x1=T1;	// Set XY1
-			*(u32*)&ThisPrim->x2=T2;	// Set XY2
-			*(u32*)&ThisPrim->x3=T3;	// Set XY3
-			T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
-			T1=*(u32*)&QList->uv1;		// Get UV1 & Clut
-			T2=*(u32*)&QList->uv2;		// Get UV2
-			T3=*(u32*)&QList->uv3;		// Get UV2
+			*(u_long*)&ThisPrim->x0=T0;	// Set XY0
+			*(u_long*)&ThisPrim->x1=T1;	// Set XY1
+			*(u_long*)&ThisPrim->x2=T2;	// Set XY2
+			*(u_long*)&ThisPrim->x3=T3;	// Set XY3
+			T0=*(u_long*)&QList->uv0;		// Get UV0 & TPage
+			T1=*(u_long*)&QList->uv1;		// Get UV1 & Clut
+			T2=*(u_long*)&QList->uv2;		// Get UV2
+			T3=*(u_long*)&QList->uv3;		// Get UV2
 			gte_stopz(&ClipZ);
 			ThisOT=OtPtr+QList->OTOfs;
 			ClipZ|=ClipFlag;			// <-- Evil!!
 			QList++;
 			if (ClipZ<0)
 			{
-				*(u32*)&ThisPrim->u0=T0;	// Set UV0
-				*(u32*)&ThisPrim->u1=T1;	// Set UV1
-				*(u32*)&ThisPrim->u2=T2;	// Set UV2
-				*(u32*)&ThisPrim->u3=T3;	// Set UV2
+				*(u_long*)&ThisPrim->u0=T0;	// Set UV0
+				*(u_long*)&ThisPrim->u1=T1;	// Set UV1
+				*(u_long*)&ThisPrim->u2=T2;	// Set UV2
+				*(u_long*)&ThisPrim->u3=T3;	// Set UV2
 				addPrim(ThisOT,ThisPrim);
 				PrimPtr+=sizeof(POLY_GT4);
 			}

@@ -83,9 +83,9 @@ CAnimTex	*ThisTex=new ("CAnimTex::AddAnimTex") CAnimTex;
 		ThisTex->FrameNo=FrameNo;
 
 		int	Size=W*H;
-		ThisTex->TexData=(u32*)MemAlloc(Size*sizeof(u16), "AnTx");
+		ThisTex->TexData=(u_long*)MemAlloc(Size*sizeof(u16), "AnTx");
 		DrawSync(0);
-		StoreImage(&ThisTex->Rect,(u32*)ThisTex->TexData);
+		StoreImage(&ThisTex->Rect,(u_long*)ThisTex->TexData);
 }
 
 /*****************************************************************************/
@@ -216,7 +216,7 @@ void	CPakTex::DMAPakTex()
 //			PAK_doUnpak(UnpackBuffer,PakTexList[i].PakSpr);
 //			PAK_doUnpak(UnpackBuffer,PakTexList[i].PakSpr);
 			LZNP_Decode(PakTexList[i].PakSpr,UnpackBuffer);
-			LoadImage( PakTexList[i].DstRect, (u32*)UnpackBuffer);
+			LoadImage( PakTexList[i].DstRect, (u_long*)UnpackBuffer);
 		}
 		PakTexCount=0;
 }

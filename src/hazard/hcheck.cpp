@@ -142,11 +142,11 @@ long		Tmp;
 SVECTOR		I;
 				I.vz=CPZ;
 				I.vy=polyArea.y1;
-				I.vx=polyArea.x1; gte_RotTransPers(&I,(long*)&F4->x0,&Tmp,&Tmp, 0);
-				I.vx=polyArea.x2; gte_RotTransPers(&I,(long*)&F4->x1,&Tmp,&Tmp, 0);
+				I.vx=polyArea.x1; RotTransPers(&I,(long*)&F4->x0,&Tmp,&Tmp);
+				I.vx=polyArea.x2; RotTransPers(&I,(long*)&F4->x1,&Tmp,&Tmp);
 				I.vy=polyArea.y2; 
-				I.vx=polyArea.x1; gte_RotTransPers(&I,(long*)&F4->x2,&Tmp,&Tmp, 0);
-				I.vx=polyArea.x2; gte_RotTransPers(&I,(long*)&F4->x3,&Tmp,&Tmp, 0);
+				I.vx=polyArea.x1; RotTransPers(&I,(long*)&F4->x2,&Tmp,&Tmp);
+				I.vx=polyArea.x2; RotTransPers(&I,(long*)&F4->x3,&Tmp,&Tmp);
 				
 				setTSemiTrans(F4,1);
 				setTABRMode(F4,CPA);

@@ -173,7 +173,7 @@ static	void		SetData(sLevelHdr *LevelHdr);
 		void		SetModel(int Type);
 
 static	void		RenderTile(DVECTOR &Pos,int TileID);
-static	void		RenderElem(sElem3d *Elem,DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0xffffffff,u32 *TransBuffer=(u32*)SCRATCH_RAM);
+static	void		RenderElem(sElem3d *Elem,DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0xffffffff,u_long *TransBuffer=(u_long*)SCRATCH_RAM);
 
 		void		Render(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0,s32 ClipFlag=0) {RenderElem(Elem,Pos,Angle,Scale,ClipFlag);}
 		void		RenderNoClip(DVECTOR &Pos,SVECTOR *Angle=0,VECTOR *Scale=0)	{Render(Pos,Angle,Scale,0xffffffff);}

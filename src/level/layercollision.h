@@ -76,7 +76,7 @@ protected:
 		u8				*Map;
 
 		static u8		s_collisionTable[];
-		int				*ColYTable;
+		u_long				*ColYTable;
 };
 
 

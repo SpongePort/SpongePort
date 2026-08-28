@@ -10,7 +10,7 @@
 #include 	"sound/cdxa.h"
 
 #include 	<libcd.h>
-//#include 	<libsnd.h>
+#include 	<libsnd.h>
 
 //#ifndef __SOUND_SNDBANK_H__
 //#include "sound/sndbank.h"
@@ -21,7 +21,7 @@
 // You will need a CD with Track1 synced to something, oh, and a CD drive
 //#define	FORCE_XA	1	
 
-#if	__FILE_SYSTEM_CD__ | FORCE_XA 
+#if		__FILE_SYSTEM_CD__ | FORCE_XA 
 #define	ENABLE_XA	
 #endif
 
@@ -310,7 +310,7 @@ SpuCommonAttr	Attr;
 	CDVol.val1 = 127;		// CdL -> SpuR
 	CDVol.val2 = 127;		// CdR -> SpuR
 	CDVol.val3 = 127;		// CdR -> SpuL
-//	CdMix(&CDVol);
+	CdMix(&CDVol);
 }
 
 /*****************************************************************************/
@@ -326,7 +326,7 @@ SpuCommonAttr	Attr;
 	CDVol.val1 = 0;		// CdL -> SpuR
 	CDVol.val2 = 0;		// CdR -> SpuR
 	CDVol.val3 = 0;		// CdR -> SpuL
-	//CdMix(&CDVol);
+	CdMix(&CDVol);
 }
 
 

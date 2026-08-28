@@ -149,7 +149,7 @@ void CSaveLoadDatabase::gatherData()
 	Params:
 	Returns:
   ---------------------------------------------------------------------- */
-bool CSaveLoadDatabase::startSave(char *_filename,int _fileNum)
+bool CSaveLoadDatabase::startSave(char *_filename,int _fileNum=-1)
 {
 	char	nameBuf[9]="\0";
 

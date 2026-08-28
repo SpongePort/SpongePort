@@ -167,12 +167,12 @@ s16		*Tab;
 			{
 				s32		Tmp;
 				DVECTOR	O;
-				CMX_SetTransMtxXY(&BlkPos);
+				gte_SetTransMtx(&BlkPos);
 				Pnt.vz=-BLOCK_SIZE*4;
-				gte_RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp, 0);
+				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
 				*Tab++=O.vx;
 				Pnt.vz=+BLOCK_SIZE*4;
-				gte_RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp, 0);
+				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
 				*Tab++=O.vx;
 				BlkPos.vx+=BLOCK_SIZE;
 			}
@@ -186,7 +186,7 @@ s16		*Tab;
 			{
 				s32		Tmp;
 				DVECTOR	O;
-				CMX_SetTransMtxXY(&BlkPos);
+				gte_SetTransMtx(&BlkPos);
 				Pnt.vz=-BLOCK_SIZE*4;
 				RotTransPers(&Pnt,(s32*)&O,&Tmp,&Tmp);
 				*Tab++=O.vy;
@@ -270,7 +270,7 @@ s32		*OutPtr;
 			OutPtr=OutVtx;
 			OutVtx+=3;
 			gte_ldv3(V0,V1,V2);
-			//gte_stsxy3c(OutPtr);	// read XY back
+			gte_stsxy3c(OutPtr);	// read XY back
 		}
 }
 
@@ -319,35 +319,35 @@ s16				TCount=0,QCount=0;
 					sFlipTable	*FTab=&FlipTable[Tile&3];
 					u8			*RGB=&RGBTable[RGBOfs*(16*4)];
 
-					CMX_SetTransMtxXY(&BlkPos);
-					CMX_SetRotMatrixXY(&FTab->Mtx);
+					gte_SetTransMtx(&BlkPos);
+					gte_SetRotMatrix(&FTab->Mtx);
 
 // --- Cache Vtx ----------
 					{
 					int		Count=Elem->VtxTriCount;
-					sVtx	*V0,*V1,*V2;
+					SVECTOR	*V0,*V1,*V2;
 					u16		*IdxTable=&VtxIdxList[Elem->VtxIdxStart];
 					s32		*OutVtx=(s32*)SCRATCH_RAM;
 					s32		*OutPtr;
 
 							OutVtx+=8;
 
-							V0=&VtxList[*IdxTable++];
-							V1=&VtxList[*IdxTable++];
-							V2=&VtxList[*IdxTable++];
+							V0=(SVECTOR*)&VtxList[*IdxTable++];
+							V1=(SVECTOR*)&VtxList[*IdxTable++];
+							V2=(SVECTOR*)&VtxList[*IdxTable++];
 							gte_ldv3(V0,V1,V2);
 
 							while (Count--)
 							{
 								gte_rtpt_b(); // 22 cycles
 					// Preload next (when able) - Must check this
-								V0=&VtxList[*IdxTable++];
-								V1=&VtxList[*IdxTable++];
-								V2=&VtxList[*IdxTable++];
+								V0=(SVECTOR*)&VtxList[*IdxTable++];
+								V1=(SVECTOR*)&VtxList[*IdxTable++];
+								V2=(SVECTOR*)&VtxList[*IdxTable++];
 								OutPtr=OutVtx;
 								OutVtx+=3;
 								gte_ldv3(V0,V1,V2);
-								//gte_stsxy3c(OutPtr);	// read XY back
+								gte_stsxy3_gt3(OutPtr);	// read XY back
 							}
 					}
 
@@ -391,9 +391,9 @@ s16				TCount=0,QCount=0;
 					{
 						POLY_GT3	*ThisPrim=(POLY_GT3*)PrimPtr;
 
-						T0=*(u32*)(XYList+TList->P0); 
-						T1=*(u32*)(XYList+TList->P1); 
-						T2=*(u32*)(XYList+TList->P2);
+						T0=*(u_long*)(XYList+TList->P0); 
+						T1=*(u_long*)(XYList+TList->P1); 
+						T2=*(u_long*)(XYList+TList->P2);
 						gte_ldsxy0(T0);
 						gte_ldsxy1(T1);
 						gte_ldsxy2(T2);
@@ -401,27 +401,27 @@ s16				TCount=0,QCount=0;
 						setlen(ThisPrim, GPU_PolyGT3Tag);
 						gte_nclip_b();	// 8 cycles
 
-						*(u32*)&ThisPrim->x0=T0;	// Set XY0
-						*(u32*)&ThisPrim->x1=T1;	// Set XY1
-						*(u32*)&ThisPrim->x2=T2;	// Set XY2
-						T0=*(u32*)&TList->uv0;		// Get UV0 & TPage
-						T1=*(u32*)&TList->uv1;		// Get UV1 & Clut
-						T2=*(u32*)&TList->uv2;		// Get UV2
+						*(u_long*)&ThisPrim->x0=T0;	// Set XY0
+						*(u_long*)&ThisPrim->x1=T1;	// Set XY1
+						*(u_long*)&ThisPrim->x2=T2;	// Set XY2
+						T0=*(u_long*)&TList->uv0;		// Get UV0 & TPage
+						T1=*(u_long*)&TList->uv1;		// Get UV1 & Clut
+						T2=*(u_long*)&TList->uv2;		// Get UV2
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+TList->OTOfs;
 						ClipZ^=FTab->ClipCode;
 						if (ClipZ<0)
 						{
-							*(u32*)&ThisPrim->u0=T0;	// Set UV0
-							*(u32*)&ThisPrim->u1=T1;	// Set UV1
-							*(u32*)&ThisPrim->u2=T2;	// Set UV2
+							*(u_long*)&ThisPrim->u0=T0;	// Set UV0
+							*(u_long*)&ThisPrim->u1=T1;	// Set UV1
+							*(u_long*)&ThisPrim->u2=T2;	// Set UV2
 							{ // lighting
-								T0=*(u32*)&RGB[TList->C0];
-								T1=*(u32*)&RGB[TList->C1];
-								T2=*(u32*)&RGB[TList->C2];
-								*(u32*)&ThisPrim->r0=T0;
-								*(u32*)&ThisPrim->r1=T1;
-								*(u32*)&ThisPrim->r2=T2;
+								T0=*(u_long*)&RGB[TList->C0];
+								T1=*(u_long*)&RGB[TList->C1];
+								T2=*(u_long*)&RGB[TList->C2];
+								*(u_long*)&ThisPrim->r0=T0;
+								*(u_long*)&ThisPrim->r1=T1;
+								*(u_long*)&ThisPrim->r2=T2;
 							}
 #if		defined(_SHOW_POLYZ_)	
 							if (ShowPolyz)	{setRGB0(ThisPrim,127,0,0); setRGB1(ThisPrim,255,0,0); setRGB2(ThisPrim,255,0,0); TCount++;}	
@@ -439,43 +439,43 @@ s16				TCount=0,QCount=0;
 					{
 						POLY_GT4	*ThisPrim=(POLY_GT4*)PrimPtr;
 
-						T0=*(u32*)(XYList+QList->P0); 
-						T1=*(u32*)(XYList+QList->P1); 
-						T2=*(u32*)(XYList+QList->P2);
+						T0=*(u_long*)(XYList+QList->P0); 
+						T1=*(u_long*)(XYList+QList->P1); 
+						T2=*(u_long*)(XYList+QList->P2);
 						gte_ldsxy0(T0);
 						gte_ldsxy1(T1);
 						gte_ldsxy2(T2);
 						
 						setlen(ThisPrim, GPU_PolyGT4Tag);
 						gte_nclip_b();	// 8 cycles
-						T3=*(u32*)(XYList+QList->P3);
+						T3=*(u_long*)(XYList+QList->P3);
 
-						*(u32*)&ThisPrim->x0=T0;	// Set XY0
-						*(u32*)&ThisPrim->x1=T1;	// Set XY1
-						*(u32*)&ThisPrim->x2=T2;	// Set XY2
-						*(u32*)&ThisPrim->x3=T3;	// Set XY3
-						T0=*(u32*)&QList->uv0;		// Get UV0 & TPage
-						T1=*(u32*)&QList->uv1;		// Get UV1 & Clut
-						T2=*(u32*)&QList->uv2;		// Get UV2
-						T3=*(u32*)&QList->uv3;		// Get UV2
+						*(u_long*)&ThisPrim->x0=T0;	// Set XY0
+						*(u_long*)&ThisPrim->x1=T1;	// Set XY1
+						*(u_long*)&ThisPrim->x2=T2;	// Set XY2
+						*(u_long*)&ThisPrim->x3=T3;	// Set XY3
+						T0=*(u_long*)&QList->uv0;		// Get UV0 & TPage
+						T1=*(u_long*)&QList->uv1;		// Get UV1 & Clut
+						T2=*(u_long*)&QList->uv2;		// Get UV2
+						T3=*(u_long*)&QList->uv3;		// Get UV2
 						gte_stopz(&ClipZ);
 						ThisOT=OtPtr+QList->OTOfs;
 						ClipZ^=FTab->ClipCode;
 						if (ClipZ<0)
 						{
-							*(u32*)&ThisPrim->u0=T0;	// Set UV0
-							*(u32*)&ThisPrim->u1=T1;	// Set UV1
-							*(u32*)&ThisPrim->u2=T2;	// Set UV2
-							*(u32*)&ThisPrim->u3=T3;	// Set UV2
+							*(u_long*)&ThisPrim->u0=T0;	// Set UV0
+							*(u_long*)&ThisPrim->u1=T1;	// Set UV1
+							*(u_long*)&ThisPrim->u2=T2;	// Set UV2
+							*(u_long*)&ThisPrim->u3=T3;	// Set UV2
 							{ // Lighting
-								T0=*(u32*)&RGB[QList->C0];
-								T1=*(u32*)&RGB[QList->C1];
-								T2=*(u32*)&RGB[QList->C2];
-								T3=*(u32*)&RGB[QList->C3];
-								*(u32*)&ThisPrim->r0=T0;
-								*(u32*)&ThisPrim->r1=T1;
-								*(u32*)&ThisPrim->r2=T2;
-								*(u32*)&ThisPrim->r3=T3;
+								T0=*(u_long*)&RGB[QList->C0];
+								T1=*(u_long*)&RGB[QList->C1];
+								T2=*(u_long*)&RGB[QList->C2];
+								T3=*(u_long*)&RGB[QList->C3];
+								*(u_long*)&ThisPrim->r0=T0;
+								*(u_long*)&ThisPrim->r1=T1;
+								*(u_long*)&ThisPrim->r2=T2;
+								*(u_long*)&ThisPrim->r3=T3;
 							}
 #if		defined(_SHOW_POLYZ_)	
 							if (ShowPolyz)	{setRGB0(ThisPrim,0,127,0);setRGB1(ThisPrim,0,255,0); setRGB2(ThisPrim,0,255,0); setRGB3(ThisPrim,0,255,0); QCount++;}	

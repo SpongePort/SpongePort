@@ -18,13 +18,6 @@
 #include "utils/mathtab.h"
 #endif
 
-MATRIX *TransposeMatrix(MATRIX *m0,MATRIX *m1)
-{
-	MATRIX* r = 0;
-
-	return r;
-}
-
 
 /*****************************************************************************/
 const s16 CircleTable[ CIRCLE_TAB_MAX] =

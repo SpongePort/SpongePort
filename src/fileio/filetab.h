@@ -37,7 +37,7 @@ enum	FILEPOS_ENUM
 
 extern char *FileNameList[];
 extern int FilePositions[];
-void CalcFilePos(int *);
+void CalcFilePos(u_long *);
 
 /*******************************************************************************/
 

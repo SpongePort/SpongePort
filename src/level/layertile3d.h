@@ -5,18 +5,6 @@
 #ifndef __LAYER_TILE_3D_Hx__
 #define __LAYER_TILE_3D_Hx__
 
-/*
-#define CMX_SetRotMatrixXY( r0 ) __asm__  (       \
-    "lw $12, 0( %0 );"                  \
-    "lw $13, 4( %0 );"                  \
-    "ctc2   $12, $0;"                   \
-    "ctc2   $13, $2;"                   \
-    :                           \
-    : "r"( r0 )                     \
-    : "$12", "$13")
-*/
-#define CMX_SetRotMatrixXY( r0 ) {}
-#warning CMX_SetRotMatrixXY( r0 ): unimplemented
 struct	sFlipTable
 {
 	s16		Mtx[4];				// 8

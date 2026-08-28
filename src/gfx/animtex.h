@@ -27,7 +27,7 @@ private:
 		RECT		Rect;
 		s16			Speed,Count;
 		s16			PixPerWord;
-		u32			*TexData;
+		u_long			*TexData;
 		FileEquate	TexName;
 		int			FrameNo;
 		u8			TPage;

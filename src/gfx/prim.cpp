@@ -51,7 +51,7 @@ void	PrimDisplay()
 	UnlinkOTagR(OtPtr, MAX_OT, &DmaStart[PrimFlipFlag]);
 
 #ifdef	USE_NTAGS
-	DrawOTag((u32*)&DmaStart[PrimFlipFlag]);
+	DrawOTag((u_long*)&DmaStart[PrimFlipFlag]);
 #else
 	DrawOTag(OtPtr+(MAX_OT-1));
 #endif
@@ -110,9 +110,9 @@ void 	ClearNTag(sOT *Ptr, long Count)
 }
 
 /*****************************************************************************/
-void 	UnlinkNTag(sOT *Ptr, long Count, u32 *StartOt)
+void 	UnlinkNTag(sOT *Ptr, long Count, u_long *StartOt)
 {
-u32 	*Tag;
+u_long 	*Tag;
 		for (; Count; Ptr++,Count--)
 			{
 			if ((Tag = Ptr->FirstPrim) == NULL) continue;
@@ -124,9 +124,9 @@ u32 	*Tag;
 }
 
 /*****************************************************************************/
-void 	UnlinkNTagR(sOT *Ptr, long Count, u32 *StartOt)
+void 	UnlinkNTagR(sOT *Ptr, long Count, u_long *StartOt)
 {
-u32 	*Tag;
+u_long 	*Tag;
 		Ptr+=Count-1;
 		for (; Count; Ptr--,Count--)
 			{

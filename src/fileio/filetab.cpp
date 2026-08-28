@@ -42,7 +42,7 @@ char	*FilenameList[FILEPOS_MAX]=
 int FilePositions[FILEPOS_MAX];
 
 /*******************************************************************************/
-void	CalcFilePos(int *Dst)
+void	CalcFilePos(u_long *Dst)
 {
 		for (int Loop=0;Loop<FILEPOS_MAX;Loop++)	
 			{

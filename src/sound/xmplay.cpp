@@ -205,7 +205,6 @@ void CXMPlaySound::think()
 			// See if these have finished playing					
 			case SONG:
 			case SFX:
-			/*
 				if(XM_GetFeedback(ch->m_internalId,&fb))
 				{
 					// Just mark it as silent, if it's unlocked then it'll die next frame
@@ -213,7 +212,7 @@ void CXMPlaySound::think()
 
 					// And kill it in the player
 					XM_Quit(ch->m_internalId);
-				}*/
+				}
 				break;
 				
 			case LOOPINGSFX:
@@ -254,7 +253,7 @@ if(sounddebug)
 
 	for(i=0;i<NUM_SPU_CHANNELS;i++)
 	{
-		const int	*colour=&colours[ch->m_useType][0];
+		const u_long*colour=&colours[ch->m_useType][0];
 		f4=GetPrimF4();
 		setXYWH(f4,x,20,8,8);
 		setRGB0(f4,*(colour++),*(colour++),*(colour++));
@@ -375,11 +374,10 @@ void CXMPlaySound::setMasterSfxVolume(unsigned char _vol)
 ---------------------------------------------------------------------- */
 xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 {
-	
 	int				vabId;
 	XMVab			*vab;
 	unsigned char	*VbPtr,*VhPtr;
-	/*
+
 
 	// Is the bank already loaded?
 	vab=m_xmVabs;
@@ -414,7 +412,6 @@ xmSampleId CXMPlaySound::loadSampleData(FileEquate _vhFe,FileEquate _vbFe)
 		}
 		vabId++;vab++;
 	}
-	*/
 
 	return (xmSampleId)vabId;
 }
@@ -452,7 +449,7 @@ xmModId CXMPlaySound::loadModData(FileEquate _modFe)
 		if(mod->m_refCount==0)
 		{
 			mod->m_xmData=(u8*)CFileIO::loadFile(_modFe);
-			InitXMData(mod->m_xmData,modId,0);
+			InitXMData(mod->m_xmData,modId,XM_UseXMPanning);
 			mod->m_file=_modFe;
 			mod->m_refCount=1;
 			break;
@@ -511,13 +508,9 @@ void CXMPlaySound::dumpModData(xmModId _modId)
 void CXMPlaySound::setStereo(int _stereo)
 {
 	if(_stereo)
-	{
-		//XM_SetStereo();
-	}
-	else 
-	{
-		//XM_SetMono();
-	}
+		XM_SetStereo();
+	else
+		XM_SetMono();
 }
 
 
@@ -591,11 +584,11 @@ void CXMPlaySound::setPanning(xmPlayingId _playingId,char _pan)
 				break;
 				
 			case SONG:
-				//XM_SetMasterPan(ch->m_internalId,_pan-128);
+				XM_SetMasterPan(ch->m_internalId,_pan-128);
 				break;
 				
 			case SFX:
-				//XM_SetMasterPan(ch->m_internalId,_pan-128);
+				XM_SetMasterPan(ch->m_internalId,_pan-128);
 				break;
 				
 			case LOOPINGSFX:
@@ -811,7 +804,7 @@ void CXMPlaySound::stopPlayingId(xmPlayingId _playingId)
 				break;
 
 			case LOOPINGSFX:
-				//XM_StopSample(ch->m_internalId);
+				XM_StopSample(ch->m_internalId);
 				ch->m_useType=SILENTSFX;
 				break;
 				
@@ -877,7 +870,7 @@ xmPlayingId	CXMPlaySound::playSfx(xmSampleId _sampleId,xmModId _modId,int _sfxPa
 				   _playMask,			// Play mask
 				   XM_SFX,				// SFX
 				   _sfxPattern);		// SFX pattern to play
-		//XM_ClearSFXRange();
+		XM_ClearSFXRange();
 		markChannelsAsActive(baseChannel,channelCount,SFX,retId,id,_priority);
 		m_spuChannelUse[baseChannel].m_startPattern=_sfxPattern;
 		setVolume(retId,MAX_VOLUME);
@@ -906,7 +899,7 @@ xmPlayingId	CXMPlaySound::playLoopingSfx(xmSampleId _sampleId,xmModId _modId,int
 	if(baseChannel!=-1)
 	{
 		retId=getNextSparePlayingId(baseChannel);
-		//XM_PlaySample(XM_GetSampleAddress(_sampleId,_soundId),baseChannel,0x3fff,0x3fff,_pitch);
+		XM_PlaySample(XM_GetSampleAddress(_sampleId,_soundId),baseChannel,0x3fff,0x3fff,_pitch);
 		markChannelsAsActive(baseChannel,1,LOOPINGSFX,retId,baseChannel,_priority);
 		setVolume(retId,MAX_VOLUME);
 	}
@@ -1026,7 +1019,6 @@ void CXMPlaySound::markChannelsAsActive(int _baseChannel,int _channelCount,CHANN
   ---------------------------------------------------------------------- */
 void CXMPlaySound::defragSpuMemory()
 {
-	/*
 	int				vabId;
 	XMVab			*vab;
 	unsigned char	*VbPtr,*VhPtr;
@@ -1060,7 +1052,6 @@ void CXMPlaySound::defragSpuMemory()
 	}
 
 	SOUND_DBGMSG("..done!");
-	*/
 }
 
 

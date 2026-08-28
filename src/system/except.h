@@ -26,7 +26,7 @@
 	------------------- */
 
 #ifdef __USER_CDBUILD__
-//#define __INSTALL_EXCEPTION_HANDLER__
+#define __INSTALL_EXCEPTION_HANDLER__
 #endif
 
 
@@ -38,7 +38,7 @@
 	Globals
 	------- */
 
-extern int *reg_lst;
+extern u_long *reg_lst;
 extern int dev_kit;
 
 

@@ -66,32 +66,12 @@
 
 /*** Fast Replacements *********************************************************************************/
 
-#ifdef TARGET_PSX
-
-#undef	setaddr
-#undef	getaddr
-#define set3(r0,r1) 		({ __asm__ ( "swl %1, 2( %0 )" : : "r"( r0 ), "r"( r1 ) : "memory" ); })
-#define get3(r0) 			({ unsigned long t; __asm__ ( "lwl %0, 2( %1 )" : "=r"(t) : "r"( r0) : "memory" ); t; })
-#define setaddr(_p0,_p1)	set3((_p0), ((u32) (_p1)) << 8)
-#define getaddr(_p)			(get3(_p) >> 8)
-
-#undef	catPrim
-#define	CatPrim	catPrim
-#define	catPrim( r0, r1 ) __asm__ volatile (	\
-	"sll	$12, %1, 8;"						\
-	"swl	$12, 2( %0 )"						\
-	:											\
-	: "r"( r0 ), "r"( r1 )						\
-	: "$12", "memory" )
-
-#endif
-
 
 #ifdef	USE_NTAGS
 /*** NTag Stuff **************************************************************************************/
 struct sOT
 {
-	u32	*FirstPrim,*LastPrim;
+	u_long	*FirstPrim,*LastPrim;
 };
 
 #undef	addPrim
@@ -99,15 +79,15 @@ struct sOT
 #define addPrim(OT,Prim)						\
 {												\
    if ((OT)->FirstPrim)							\
-      setaddr(((u32*)Prim), (OT)->FirstPrim);	\
+      setaddr(((u_long*)Prim), (OT)->FirstPrim);	\
    else											\
-      (OT)->LastPrim = (u32*)(Prim);			\
-   (OT)->FirstPrim = (u32*)(Prim);				\
+      (OT)->LastPrim = (u_long*)(Prim);			\
+   (OT)->FirstPrim = (u_long*)(Prim);				\
 }
 #define addPrimNoCheck(OT,Prim)					\
 {												\
-	setaddr(((u32*)Prim), (OT)->FirstPrim);		\
-	(OT)->FirstPrim = (u32*)(Prim);				\
+	setaddr(((u_long*)Prim), (OT)->FirstPrim);		\
+	(OT)->FirstPrim = (u_long*)(Prim);				\
 }
 
 #define NTAG_addPrims(_nt,_ps,_pe) 				\
@@ -121,8 +101,8 @@ struct sOT
 
 
 void 	ClearNTag(sOT *Ptr, long Count);
-void 	UnlinkNTag(sOT *Ptr, long Count, u32 *FirstNT);
-void 	UnlinkNTagR(sOT *Ptr, long Count, u32 *FirstNT);
+void 	UnlinkNTag(sOT *Ptr, long Count, u_long *FirstNT);
+void 	UnlinkNTagR(sOT *Ptr, long Count, u_long *FirstNT);
 
 inline void UnlinkNTagtoNTag(sOT *to, sOT *from, long count)
 {
@@ -151,35 +131,7 @@ inline void UnlinkNTagtoNTag(sOT *to, sOT *from, long count)
 
 #else
 /*** OTag Stuff **************************************************************************************/
-typedef	u32	sOT;
-
-#ifdef TARGET_PSX
-
-#undef	addPrim
-#define	AddPrim		addPrim
-#define	AddPrim		addPrim
-#define	addPrim( r0, r1 ) __asm__  (			\
-	"lwl	$12, 2( %0 );"						\
-	"sll	$13, %1, 8;"						\
-	"swl	$13, 2( %0 );"						\
-	"swl	$12, 2( %1 )"						\
-	:											\
-	: "r"( r0 ), "r"( r1 )						\
-	: "$12", "$13", "memory" )
-
-#undef	addPrims
-#define	AddPrims	addPrims
-#define	addPrims( r0, r1, r2 ) __asm__  (		\
-	"lwl	$12, 2( %0 );"						\
-	"sll	$13, %1, 8;"						\
-	"swl	$13, 2( %0 );"						\
-	"swl	$12, 2( %2 )"						\
-	:											\
-	: "r"( r0 ), "r"( r1 ), "r"( r2 )			\
-	: "$12", "$13", "memory" )
-
-
-#endif
+typedef	OT_TYPE	sOT;
 
 #define	InitOTag(Ot, Count)						ClearOTag(Ot,Count);
 #define	InitOTagR(Ot, Count)					ClearOTagR(Ot,Count);
@@ -355,14 +307,14 @@ TPOLY_F4	*P=(TPOLY_F4 *)GetPrimPtr(); SetPrimPtr((u8*)(P+1)); setTPolyF4(P);
 inline	void 		AddGUIPrimToList(void *Prim,u32 Depth)
 {
 			ASSERT(Depth<MAX_OT_GUI);
-			addPrim(GUIOtPtr+Depth,(u32*)Prim);
+			addPrim(GUIOtPtr+Depth,(u_long*)Prim);
 }
 */
 /*-----------------------------------------------------------------------------------------------------*/
 inline	void 		AddPrimToList(void *Prim,u32 Depth)
 {
 			ASSERT(Depth<MAX_OT);
-			addPrim(OtPtr+Depth,(u32*)Prim);
+			addPrim(OtPtr+Depth,(u_long*)Prim);
 }
 /*-----------------------------------------------------------------------------------------------------*/
 inline	void	GetFrameUV(sFrameHdr *Fr, u8 *U,u8 *V)	{*U=Fr->U;*V=Fr->V;}

@@ -49,10 +49,10 @@
   ---------------------------------------------------------------------- */
 void CDemoPlayer::loadControlData(FileEquate _fe)
 {
-	int *hdr;
+	u_long *hdr;
 
 	m_demoData=(char*)CFileIO::loadFile(_fe);
-	hdr=(int*)m_demoData;
+	hdr=(u_long*)m_demoData;
 	
 	m_controlFrameCount=hdr[0];
 	m_controlDataSize=hdr[1];

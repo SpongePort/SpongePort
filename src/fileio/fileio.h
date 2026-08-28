@@ -9,9 +9,6 @@
 #include "system/global.h"
 #endif
 
-#ifdef EXTERNAL_ASSETS
-#include <stdio.h>
-#endif
 
 #ifndef		__FILE_EQUATES_H__
 #include 	"biglump.h"
@@ -142,10 +139,6 @@ static	sFAT		*MainFAT;
 static	sASyncQueue	ASyncQueue;
 static	bool		ASyncFlag;
 static	bool		LogFlag;
-
-#ifdef EXTERNAL_ASSETS
-static FILE* ExtFile;
-#endif
 };
 
 /*****************************************************************************/

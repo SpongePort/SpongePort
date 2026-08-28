@@ -63,7 +63,7 @@ static	int Error=0;
 		case BLStatusOpen:
 			if (CdReadSync(1,0) > 0) return;
 	    	CdControlB(CdlSetmode, &Com,0);
-			CdRead(File.Length, (u32*)File.Dst, CdlModeSpeed);
+			CdRead(File.Length, (u_long*)File.Dst, CdlModeSpeed);
 			File.Status=BLStatusRead;
 			break;
 		case BLStatusRead:
@@ -77,7 +77,7 @@ static	int Error=0;
 			CdIntToPos(File.Sector+FileStart,&CdPos);
 	    	CdControlB(CdlSetloc, (u8*)&CdPos, 0);	// Set CD Pos
 	    	CdControlB(CdlSetmode, &Com, 0);
-			Error=CdRead(File.Length, (u32*)File.Dst, CdlModeSpeed);
+			Error=CdRead(File.Length, (u_long*)File.Dst, CdlModeSpeed);
 			if (Error!=0) File.Status=BLStatusOffline;
 
 }

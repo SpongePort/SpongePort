@@ -170,9 +170,9 @@ u32				T0,T1;
 					PrimPtr->x0=TileX;
 					PrimPtr->y0=TileY;
 					T0=Tile->TPage;
-					T1=*(u32*)&Tile->u0;
+					T1=*(u_long*)&Tile->u0;
 					PrimPtr->t_code=T0;		//	pregen'd setTSprtTPage(PrimPtr,Tile->TPage);
-					*(u32*)&PrimPtr->u0=T1;	// copy uv AND clut
+					*(u_long*)&PrimPtr->u0=T1;	// copy uv AND clut
 					addPrim(ThisOT,PrimPtr);
 					PrimPtr++;
 				}

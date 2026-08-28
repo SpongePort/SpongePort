@@ -73,7 +73,7 @@ int							MemCard::s_file;
 int							MemCard::s_blockCount;
 char						MemCard::s_tempFileInfoBuffer[128];
 						
-int					MemCard::s_syncStatus,MemCard::s_syncCmds,MemCard::s_syncResults;
+long int					MemCard::s_syncStatus,MemCard::s_syncCmds,MemCard::s_syncResults;
 						
 void						*MemCard::s_bufPtr;
 						
@@ -235,7 +235,7 @@ static unsigned short *ASCIItoJIS( char *Str )
   ---------------------------------------------------------------------- */
 bool MemCard::Start( void )
 {
-	int Dummy;
+	long int Dummy;
 
 
 	// Don't allow the sytem to be activated twice!
@@ -278,7 +278,7 @@ bool MemCard::Start( void )
   ---------------------------------------------------------------------- */
 bool MemCard::Stop( void )
 {
-	int Dummy;
+	long int Dummy;
 
 
 	// Check that the system is active
@@ -838,7 +838,7 @@ void MemCard::HandleCmd_ReadDir( void )
 	// memCardGetDirectory() is blocking and returns after it has finsihed
 	switch( MemCardGetDirentry( s_currentChannel << 4, "*",
 								s_cardData[ s_currentChannel ].m_totalDirEntry,
-								&s_cardData[ s_currentChannel ].m_totalFileCount,
+								(long u_long *)&s_cardData[ s_currentChannel ].m_totalFileCount,
 								0, MAXFILES ) )
 	{
 		// OK, now we have the cards file details
@@ -895,7 +895,7 @@ void MemCard::HandleCmd_ReadFileInfo( void )
 		// No process active - Start reading file info
  		if( MemCardReadFile( s_currentChannel << 4,
 							 s_cardData[ s_currentChannel ].m_totalDirEntry[ s_file ].name,
-							 (unsigned int*)s_tempFileInfoBuffer, 0, 128 ) == 0 )
+							 (long unsigned u_long *)s_tempFileInfoBuffer, 0, 128 ) == 0 )
 		{
 			MEMCARD_DBGMSG( "[PMC] Reading file info for file %d", s_file );
 		}
@@ -968,7 +968,7 @@ void MemCard::HandleCmd_ReadFile( void )
 		// No process active - Start the load
 		int FileNumber = s_cardData[ s_currentChannel ].m_nativeFileInfo[ s_file ].m_dirEntry;
 		if( MemCardReadFile( s_currentChannel << 4, s_cardData[ s_currentChannel ].m_totalDirEntry[ FileNumber ].name,
-							 (unsigned int *)s_bufPtr,
+							 (unsigned long *)s_bufPtr,
 							 0, GetFileSizeInBlocks( s_currentChannel, s_file ) * BLOCKSIZE ) == 0 )
 		{
 //			MEMCARD_DBGMSG( "[PMC] Couldn't register MemCardReadFile!" );
@@ -1074,7 +1074,7 @@ void MemCard::HandleCmd_WriteFile( void )
 		}
 
 		// Start the write
-		if( MemCardWriteFile( s_currentChannel << 4, s_fname, (unsigned int *)s_bufPtr,
+		if( MemCardWriteFile( s_currentChannel << 4, s_fname, (unsigned long *)s_bufPtr,
 							 0, s_blockCount * BLOCKSIZE ) == 0 )
 		{
 			MEMCARD_DBGMSG( "[PMC] Couldn't register MemCardWriteFile due to '%s'", GetErrorString( s_syncResults ) );
@@ -1126,7 +1126,7 @@ void MemCard::HandleCmd_FormatCard( void )
 	int FRes;
 
 
-	int Dummy;
+	long int Dummy;
 	MemCardSync( 0, &Dummy, &Dummy );
 
 	// Format is a blocking function

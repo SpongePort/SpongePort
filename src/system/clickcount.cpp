@@ -60,13 +60,13 @@ void CClickCount::initialise()
 
 	// set up variables and environment
 
-	//EnterCriticalSection();
-	eventHandle = 1; //OpenEvent( RCntCNT2, EvSpINT, EvMdINTR,(long (*)(...)) clockTicker); // well, it's unimplemented anyways..
+	EnterCriticalSection();
+	eventHandle = OpenEvent( RCntCNT2, EvSpINT, EvMdINTR,(long (*)(...)) clockTicker);
 	EnableEvent( eventHandle );
 //	SetRCnt( RCntCNT2, COUNT_DOWN_VAL, RCntMdINTR|RCntMdSP);
 	SetRCnt( RCntCNT2, COUNT_DOWN_VAL, RCntMdINTR);
 	StartRCnt( RCntCNT2 );
-	//ExitCriticalSection();
+	ExitCriticalSection();
 }
 
 /*****************************************************************************/

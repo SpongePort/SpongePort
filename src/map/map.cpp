@@ -733,8 +733,8 @@ void	CMapScene::copyImageToScreen(int _file,int _x,int _y,int _w,int _h)
 	dst=(u16*)m_screenImage+(_x+(_y*512));
 	for(y=0;y<_h;y++)
 	{
-		u32	*S=(u32*)src;
-		u32	*D=(u32*)dst;
+		u_long	*S=(u_long*)src;
+		u_long	*D=(u_long*)dst;
 		for (int x=0; x<MAP_LEVEL_WIDTH/2; x++)
 		{
 			*D++=*S++;
